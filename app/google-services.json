@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "642884267582",
+    "project_id": "gymapp-5f360",
+    "storage_bucket": "gymapp-5f360.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642884267582:android:006750d6ddff456d526b6f",
+        "android_client_info": {
+          "package_name": "com.example.fitlife"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvPT2GJgtgIM39Olx2tb0YGiUTltNhcB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
