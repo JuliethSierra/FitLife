@@ -74,15 +74,62 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Firebase
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
+    //Room
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    // Room components
+
+    // Para Kotlin, usa kapt en lugar de annotationProcessor
+    kapt("androidx.room:room-compiler:2.5.1")
+
+    // Opcional: Room Paging
+    implementation("androidx.room:room-paging:2.5.1")
+
+    // Para usar Room con coroutines
+    implementation("androidx.room:room-ktx:2.5.1")
+
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-rc01")
+    //Corrutinas
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1")
+
+
+    //Timber
+    implementation("com.jakewharton.timber:timber:4.7.1")
+    //Lottie
+    implementation("com.airbnb.android:lottie:5.0.3")
+
+    //Compose
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.material:material:1.5.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    implementation("androidx.navigation:navigation-compose:2.5.0")
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
+    implementation("androidx.compose.material3:material3:1.2.0-alpha05")
+    implementation("androidx.compose.material:material-icons-extended:1.5.0")
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.foundation:foundation:1.5.0")
+    implementation("androidx.compose.runtime:runtime:1.5.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+
+    implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha10")
 }
 
 kapt {
