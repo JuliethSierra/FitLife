@@ -1,4 +1,4 @@
-package com.example.fitlife.data.models
+package com.example.fitlife.domain.model
 
 data class User(
     val id: String, // Identificador único del usuario (Firebase UID)

@@ -1,7 +1,7 @@
 package com.example.fitlife.data.local.mappers
 
 import com.example.fitlife.data.local.entity.UserEntity
-import com.example.fitlife.data.models.User
+import com.example.fitlife.domain.model.User
 
 
 fun User.toUserEntity(): UserEntity {
