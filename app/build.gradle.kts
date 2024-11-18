@@ -66,7 +66,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -82,10 +81,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-analytics")
 
-    //DaggerHilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-
 
     //Room
     implementation("androidx.room:room-runtime:2.6.1")
@@ -136,6 +133,12 @@ dependencies {
 
     //Iconos
     implementation("androidx.compose.material:material-icons-extended:1.3.1")
+    // Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Coil (para cargar imágenes de URL)
+    implementation ("io.coil-kt:coil-compose:2.2.2")
+
 }
 
 kapt {
