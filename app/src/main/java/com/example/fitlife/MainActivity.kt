@@ -51,9 +51,9 @@ class MainActivity : ComponentActivity() {
 
                     composable("LogIn") {
                         LoginScreen(
-                            onLoginClick = {
+                          /*  onLoginClick = {
                                 navController.navigate("InitScreen")
-                            }
+                            }*/
                         )
                     }
 

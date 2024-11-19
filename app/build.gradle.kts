@@ -130,6 +130,9 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha10")
+
+    //Iconos
+    implementation("androidx.compose.material:material-icons-extended:1.3.1")
 }
 
 kapt {
