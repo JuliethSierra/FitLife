@@ -18,7 +18,7 @@ class ExerciseViewModel(private val getExerciseUseCase: GetExerciseUseCase) : Vi
                 val result = getExerciseUseCase(name)
                 _exercise.value = result
             } catch (e: Exception) {
-                _exercise.value = emptyList() // Manejo de errores
+                _exercise.value = emptyList()
             }
         }
     }
