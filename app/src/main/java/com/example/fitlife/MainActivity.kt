@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
                     composable("LogIn") {
                         LoginScreen(
                             logInViewModel = logInViewModel,
-                            onLogInSuccess = { navController.navigate("InitScreen") }
+                            navController = navController
                         )
                     }
 
@@ -86,9 +86,7 @@ class MainActivity : ComponentActivity() {
         userViewModel.loadUsers()
     }
 
-    private fun signInWithEmailAndPassword(email: String, password: String, home: () -> Unit) {
-        logInViewModel.signInWithEmailAndPassword(email, password, home)
-    }
+
 
     private suspend fun signUp(user: User): Boolean {
         return if (user.name.isNotEmpty() && user.lastName.isNotEmpty() && user.email.isNotEmpty() &&

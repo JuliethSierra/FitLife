@@ -4,66 +4,32 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitlife.domain.model.User
+import com.example.fitlife.domain.model.usecases.LoginUseCase
+import com.example.fitlife.domain.model.usecases.SignUpUseCase
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LogInScreenViewModel: ViewModel() {
-    private val auth: FirebaseAuth = Firebase.auth
-    private val _loading = MutableLiveData(false)
-
-    fun signInWithEmailAndPassword(email: String, password:String, home: ()-> Unit)
-    = viewModelScope.launch {
-        try{
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener {task->
-                    if (task.isSuccessful){
-                        Log.d("FitLife", "signInWithEmailAndPassword logIn!!")
-                        home()
-                    }
-                    else{
-                        Log.d("FitLife", "signInWithEmailAndPassword: ${task.result.toString()}")
-
-                    }
+    @HiltViewModel
+    class LogInScreenViewModel @Inject constructor(
+        private val loginUseCase: LoginUseCase
+    ) : ViewModel() {
+        // Modificamos login para aceptar un callback con éxito o error
+        fun login(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+            viewModelScope.launch {
+                try {
+                    val result = loginUseCase.invoke(email, password)
+                    // Si el login es exitoso
+                    onResult(true, null)
+                } catch (e: Exception) {
+                    // Si ocurre un error durante el login
+                    onResult(false, e.message)
                 }
-        }
-        catch(ex:Exception){
-            Log.d("FitLife", "signInWithEmailAndPassword: ${ex.message}")
-        }
-
-    }
-
-    fun createUserWhitEmailAndPassword(email:String, password: String, home: () -> Unit){
-        if(_loading.value == false){
-            _loading.value = true
-            auth.createUserWithEmailAndPassword(email,password)
-                .addOnCompleteListener{task ->
-                    if(task.isSuccessful){
-                        home()
-                    }else{
-                        Log.d("FitLife", "createUserWhitEmailAndPassword: ${task.result.toString()}")
-                    }
-                    _loading.value = false
-                }
-        }
-    }
-
-    private fun createUser(displayName: String?){
-        val userId = auth.currentUser?.uid
-        val user = mutableMapOf<String, Any>()
-
-        user["user_id"] = userId.toString()
-        user["displayName"] = userId.toString()
-        FirebaseFirestore.getInstance().collection("user")
-            .add(user)
-            .addOnSuccessListener {
-                Log.d("FitLife", "createUserWhitEmailAndPassword: ${it.id}")
-            }.addOnFailureListener{
-
             }
-
+        }
     }
-}
-
