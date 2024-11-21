@@ -140,6 +140,11 @@ dependencies {
     // Coil (para cargar imágenes de URL)
     implementation ("io.coil-kt:coil-compose:2.2.2")
 
+    // Hilt para Compose
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    // Hilt ViewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
 }
 
 kapt {

@@ -1,14 +1,14 @@
 package com.example.fitlife.data.repository
 
-import com.example.fitlife.data.remote.ExerciseRemoteDataSource
+import com.example.fitlife.data.remote.ExerciseApiService
 import com.example.fitlife.domain.model.Exercise
+import com.example.fitlife.domain.repository.ExerciseRepository
+import javax.inject.Inject
 
-interface ExerciseRepository {
-    suspend fun getExerciseByName(name: String): List<Exercise>
-    suspend fun getAllExercises(): List<Exercise>
-}
 
-class ExerciseRepositoryImpl(private val exerciseRemoteDataSource: ExerciseRemoteDataSource) : ExerciseRepository {
+class ExerciseRepositoryImpl  @Inject constructor (
+    private val exerciseRemoteDataSource: ExerciseApiService
+) : ExerciseRepository {
     override suspend fun getExerciseByName(name: String): List<Exercise> {
         return exerciseRemoteDataSource.getExerciseByName(name)
     }

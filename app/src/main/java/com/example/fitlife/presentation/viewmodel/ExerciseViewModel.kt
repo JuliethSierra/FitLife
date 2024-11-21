@@ -1,5 +1,6 @@
 package com.example.fitlife.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.fitlife.domain.model.Exercise
 import com.example.fitlife.domain.usecase.GetAllExercisesUseCase
@@ -17,22 +18,35 @@ class ExerciseViewModel @Inject constructor(
     private val _exercises = MutableLiveData<List<Exercise>>()
     val exercises: LiveData<List<Exercise>> get() = _exercises
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
+    init {
+        fetchAllExercises()
+    }
+
     fun fetchAllExercises() {
         viewModelScope.launch {
             try {
-                _exercises.value = getAllExercisesUseCase()
+                val exercisesList = getAllExercisesUseCase()
+                _exercises.value = exercisesList
+                Log.d("ExerciseViewModel", "Ejercicios cargados: ${exercisesList.size}")
             } catch (e: Exception) {
-                _exercises.value = emptyList() // Manejo de errores
+                _exercises.value = emptyList()
+                Log.e("ExerciseViewModel", "Error al cargar ejercicios", e)
             }
         }
     }
 
     fun fetchExercisesByName(name: String) {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 _exercises.value = getExerciseByNameUseCase(name)
             } catch (e: Exception) {
-                _exercises.value = emptyList() // Manejo de errores
+                _exercises.value = emptyList()
+            } finally {
+                _isLoading.value = false
             }
         }
     }
