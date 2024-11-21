@@ -1,61 +1,115 @@
 package com.example.fitlife.presentation.ui.screens.login
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
+
+
+import android.widget.Toast
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
+
 import androidx.compose.runtime.getValue
+
 import androidx.compose.runtime.setValue
 
 
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit
+    navController: NavController,
+    logInViewModel: LogInScreenViewModel
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var isPasswordVisible by remember { mutableStateOf(false) }
+    val emailState = remember { mutableStateOf("a@s.com") }
+    val passwordState = remember { mutableStateOf("12345678") }
+    var passwordVisibility by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth()
+    Surface(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = "Welcome Back!",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
+            item {
+                Text(
+                    text = "Iniciar Sesión",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
 
+            item {
+                OutlinedTextField(
+                    value = emailState.value,
+                    onValueChange = { emailState.value = it },
+                    label = { Text("Correo Electrónico") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
-            // Login Button
-            Button(
-                onClick = onLoginClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-            ) {
-                Text(text = "Log In")
+            item {
+                OutlinedTextField(
+                    value = passwordState.value,
+                    onValueChange = { passwordState.value = it },
+                    label = { Text("Contraseña") },
+                    singleLine = true,
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image = if (passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(imageVector = image, contentDescription = null)
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = androidx.compose.ui.text.input.KeyboardType.Password)
+                )
+            }
+
+            item {
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            logInViewModel.login(emailState.value, passwordState.value) { success, errorMessage ->
+                                if (success) {
+                                    Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                                    navController.navigate("InitScreen") // Cambia por tu pantalla principal
+                                } else {
+                                    Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Iniciar Sesión")
+                }
             }
         }
     }

@@ -2,34 +2,37 @@ package com.example.fitlife.data.local.mappers
 
 import com.example.fitlife.data.local.entity.UserEntity
 import com.example.fitlife.domain.model.User
+import com.example.fitlife.domain.model.enums.GenderEnum
 
 
 fun User.toUserEntity(): UserEntity {
     return UserEntity(
-        id = id,
-        fullName = fullName,
+        name = name,
+        lastName = lastName,
         email = email,
         height = height,
         birthDate = birthDate,
-        gender = gender,
+        gender = gender.name, // Convierte GenderEnum a String para almacenarlo
         weight = weight,
         profilePictureUrl = profilePictureUrl,
-        createdAt = createdAt,
-        lastLogin = lastLogin
+        numberPhone = numberPhone,
+        password = password,
+        uid = uid
     )
 }
 
 fun UserEntity.toUser(): User {
     return User(
-        id = id,
-        fullName = fullName,
+        name = name,
+        lastName = lastName,
         email = email,
         height = height,
         birthDate = birthDate,
-        gender = gender,
+        gender = GenderEnum.valueOf(gender.uppercase()), // Convierte String a GenderEnum
         weight = weight,
         profilePictureUrl = profilePictureUrl,
-        createdAt = createdAt,
-        lastLogin = lastLogin
+        numberPhone = numberPhone,
+        password = password,
+        uid = uid
     )
 }
