@@ -12,6 +12,7 @@ import com.example.fitlife.presentation.ui.screens.initScreen.InitScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
 import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
 import com.example.fitlife.presentation.ui.screens.login.LoginScreen
+import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.ui.theme.FitLifeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,13 +53,13 @@ class MainActivity : ComponentActivity() {
                     composable("LogIn") {
                         LoginScreen(
                             onLoginClick = {
-                                navController.navigate("InitScreen")
+                                navController.navigate("TrainingScreen")
                             }
                         )
                     }
 
-                    composable("InitScreen") {
-                        InitScreen()
+                    composable("TrainingScreen") {
+                        TrainingScreenWithViewModel()
                     }
                 }
             }

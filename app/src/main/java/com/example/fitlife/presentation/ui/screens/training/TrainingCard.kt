@@ -19,10 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 
+
 @Composable
-fun TrainingCard(title: String) {
+fun TrainingCard(title: String, gifUrl: String) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp,
@@ -36,19 +38,17 @@ fun TrainingCard(title: String) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Imagen de ejemplo
-            Box(
+            AsyncImage(
+                model = gifUrl,
+                contentDescription = "Exercise Image",
                 modifier = Modifier
                     .size(48.dp)
-                    .background(Color.Gray, shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Img", color = Color.White)
-            }
+                    .background(Color.Gray, shape = CircleShape)
+            )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Título
+            // Título del ejercicio
             Text(
                 text = title,
                 style = MaterialTheme.typography.body1,
@@ -61,5 +61,5 @@ fun TrainingCard(title: String) {
 @Preview(showBackground = true)
 @Composable
 fun TrainingCardPreview(){
-    TrainingCard("Prueba")
+    TrainingCard("Prueba", "https://v2.exercisedb.io/image/l2c1NYwRCTRoBg")
 }
