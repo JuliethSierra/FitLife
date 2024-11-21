@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 class LogInScreenViewModel: ViewModel() {
@@ -33,4 +34,36 @@ class LogInScreenViewModel: ViewModel() {
         }
 
     }
+
+    fun createUserWhitEmailAndPassword(email:String, password: String, home: () -> Unit){
+        if(_loading.value == false){
+            _loading.value = true
+            auth.createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener{task ->
+                    if(task.isSuccessful){
+                        home()
+                    }else{
+                        Log.d("FitLife", "createUserWhitEmailAndPassword: ${task.result.toString()}")
+                    }
+                    _loading.value = false
+                }
+        }
+    }
+
+    private fun createUser(displayName: String?){
+        val userId = auth.currentUser?.uid
+        val user = mutableMapOf<String, Any>()
+
+        user["user_id"] = userId.toString()
+        user["displayName"] = userId.toString()
+        FirebaseFirestore.getInstance().collection("user")
+            .add(user)
+            .addOnSuccessListener {
+                Log.d("FitLife", "createUserWhitEmailAndPassword: ${it.id}")
+            }.addOnFailureListener{
+
+            }
+
+    }
 }
+

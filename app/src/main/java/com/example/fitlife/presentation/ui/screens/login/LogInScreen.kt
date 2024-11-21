@@ -34,9 +34,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
+import com.example.fitlife.presentation.viewmodel.UserViewModel
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    logInViewModel: LogInScreenViewModel,
+    onLogInSuccess: () -> Unit
+) {
     val showLoginForm = rememberSaveable { mutableStateOf(true) }
 
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -46,8 +51,11 @@ fun LoginScreen() {
         ) {
             if (showLoginForm.value) {
                 Text(text = "Inicia Sesión")
-                UserForm(isCreateAccount = false) { email, password ->
+                UserForm(isCreateAccount = false
+                ) {
+                  email, password ->
                     Log.d("FitLife", "LogIn with $email y $password")
+                    logInViewModel.signInWithEmailAndPassword(email, password, onLogInSuccess)
                 }
             } else {
                 Text(text = "Crea una Cuenta")
@@ -160,6 +168,105 @@ fun UserForm(
         }
     }
 }
+
+/*
+* @Composable
+fun UserForm(
+    isCreateAccount: Boolean = false,
+    onDone: (String, String, String, String, String, String, String, String, String) -> Unit = { _, _, _, _, _, _, _, _, _ -> }
+){
+    val email = rememberSaveable { mutableStateOf("") }
+    val password = rememberSaveable { mutableStateOf("") }
+    val confirmPassword = rememberSaveable { mutableStateOf("") }
+    val passwordVisible = rememberSaveable { mutableStateOf(false) }
+    val confirmPasswordVisible = rememberSaveable { mutableStateOf(false) }
+
+    val nombre = rememberSaveable { mutableStateOf("") }
+    val apellido = rememberSaveable { mutableStateOf("") }
+    val telefono = rememberSaveable { mutableStateOf("") }
+    val fechaNacimiento = rememberSaveable { mutableStateOf("") }
+    val sexo = rememberSaveable { mutableStateOf("") }
+    val peso = rememberSaveable { mutableStateOf("") }
+    val estatura = rememberSaveable { mutableStateOf("") }
+
+    val valid = remember(
+        email.value,
+        password.value,
+        confirmPassword.value,
+        nombre.value,
+        apellido.value,
+        telefono.value,
+        fechaNacimiento.value,
+        sexo.value,
+        peso.value,
+        estatura.value
+    ) {
+        email.value.trim().isNotEmpty() &&
+                password.value.trim().isNotEmpty() &&
+                (!isCreateAccount || (
+                        nombre.value.trim().isNotEmpty() &&
+                                apellido.value.trim().isNotEmpty() &&
+                                telefono.value.trim().isNotEmpty() &&
+                                fechaNacimiento.value.trim().isNotEmpty() &&
+                                sexo.value.trim().isNotEmpty() &&
+                                peso.value.trim().isNotEmpty() &&
+                                estatura.value.trim().isNotEmpty() &&
+                                confirmPassword.value.trim().isNotEmpty() &&
+                                password.value == confirmPassword.value
+                        ))
+    }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        if (isCreateAccount) {
+            InputField(valueState = nombre, labelId = "Nombre", keyboardType = KeyboardType.Text)
+            InputField(valueState = apellido, labelId = "Apellido", keyboardType = KeyboardType.Text)
+            InputField(valueState = telefono, labelId = "Número de Teléfono", keyboardType = KeyboardType.Phone)
+            InputField(valueState = fechaNacimiento, labelId = "Fecha de Nacimiento", keyboardType = KeyboardType.Text)
+            InputField(valueState = sexo, labelId = "Sexo", keyboardType = KeyboardType.Text)
+            InputField(valueState = peso, labelId = "Peso (kg)", keyboardType = KeyboardType.Number)
+            InputField(valueState = estatura, labelId = "Estatura (cm)", keyboardType = KeyboardType.Number)
+        }
+
+        EmailInput(emailState = email)
+        PasswordInput(
+            passwordState = password,
+            labelId = "Contraseña",
+            passwordVisible = passwordVisible
+        )
+
+        if (isCreateAccount) {
+            PasswordInput(
+                passwordState = confirmPassword,
+                labelId = "Confirmar Contraseña",
+                passwordVisible = confirmPasswordVisible
+            )
+        }
+
+        SubmitButton(
+            textId = if (isCreateAccount) "Crear Cuenta" else "Iniciar Sesión",
+            inputValid = valid
+        ) {
+            if (isCreateAccount) {
+                onDone(
+                    email.value.trim(),
+                    password.value.trim(),
+                    nombre.value.trim(),
+                    apellido.value.trim(),
+                    telefono.value.trim(),
+                    fechaNacimiento.value.trim(),
+                    sexo.value.trim(),
+                    peso.value.trim(),
+                    estatura.value.trim()
+                )
+            } else {
+                onDone(email.value.trim(), password.value.trim(), "", "", "", "", "", "", "")
+            }
+            keyboardController?.hide()
+        }
+    }
+}*/
 
 @Composable
 fun PasswordInput(
