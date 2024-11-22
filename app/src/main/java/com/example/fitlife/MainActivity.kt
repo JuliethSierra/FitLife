@@ -1,7 +1,6 @@
 package com.example.fitlife
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -16,11 +15,13 @@ import com.example.fitlife.presentation.ui.screens.initScreen.InitScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
 import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
 import com.example.fitlife.presentation.ui.screens.login.LoginScreen
+import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.presentation.ui.screens.signin.SignInScreen
 import com.example.fitlife.presentation.ui.screens.utils.Constants
 import com.example.fitlife.presentation.ui.screens.utils.Util
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import com.example.fitlife.presentation.viewmodel.SignUpViewModel
+import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.ui.theme.FitLifeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -60,21 +61,21 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("SignIn") {
-                        SignInScreen(
-                            signUpViewModel = signUpViewModel,
-                            navController = navController
-                        )
+
                     }
 
                     composable("LogIn") {
                         LoginScreen(
                             logInViewModel = logInViewModel,
                             navController = navController
+                            onLoginClick = {
+                                navController.navigate("TrainingScreen")
+                            }
                         )
                     }
 
-                    composable("InitScreen") {
-                        InitScreen()
+                    composable("TrainingScreen") {
+                        TrainingScreenWithViewModel()
                     }
                 }
             }
