@@ -21,6 +21,7 @@ import com.example.fitlife.presentation.ui.screens.utils.Constants
 import com.example.fitlife.presentation.ui.screens.utils.Util
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import com.example.fitlife.presentation.viewmodel.SignUpViewModel
+import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.ui.theme.FitLifeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -60,10 +61,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("SignIn") {
-                        SignInScreen(
-                            signUpViewModel = signUpViewModel,
-                            navController = navController
-                        )
+
                     }
 
                     composable("LogIn") {
