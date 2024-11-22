@@ -99,7 +99,7 @@ fun LoginScreen(
                             logInViewModel.login(emailState.value, passwordState.value) { success, errorMessage ->
                                 if (success) {
                                     Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                                    navController.navigate("InitScreen") // Cambia por tu pantalla principal
+                                    navController.navigate("TrainingScreen") // Cambia por tu pantalla principal
                                 } else {
                                     Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
                                 }

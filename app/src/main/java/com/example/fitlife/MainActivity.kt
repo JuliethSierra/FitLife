@@ -1,6 +1,7 @@
 package com.example.fitlife
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
             val usersState = userViewModel.uiState.collectAsState()
 
             val navController = rememberNavController()
+
             FitLifeTheme {
                 NavHost(
                     navController = navController,
@@ -68,9 +70,6 @@ class MainActivity : ComponentActivity() {
                         LoginScreen(
                             logInViewModel = logInViewModel,
                             navController = navController
-                            onLoginClick = {
-                                navController.navigate("TrainingScreen")
-                            }
                         )
                     }
 
