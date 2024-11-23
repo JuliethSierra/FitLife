@@ -1,5 +1,4 @@
-package com.example.fitlife.presentation.ui.screens.initScreen
-
+package com.example.fitlife.presentation.ui.screens.profilescreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,7 +11,7 @@ import androidx.compose.ui.Modifier
 import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 
 @Composable
-fun InitScreen() {
+fun ProfileScreen() {
     Scaffold(
         bottomBar = { BottomNavigationBar() }
     ) { paddingValues ->
@@ -23,7 +22,7 @@ fun InitScreen() {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "InitScreen",
+                text = "ProfileScreen",
                 style = MaterialTheme.typography.titleLarge
             )
         }

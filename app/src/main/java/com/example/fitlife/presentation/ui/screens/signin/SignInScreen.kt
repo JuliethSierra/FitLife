@@ -156,7 +156,7 @@ fun SignInScreen(
                         val success = signUpViewModel.signUp(user)
                         if (success) {
                             Toast.makeText(context, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show()
-                            navController.navigate("InitScreen")
+                            navController.navigate("LogIn")
                         } else {
                             Toast.makeText(context, "Error al registrar el usuario", Toast.LENGTH_SHORT).show()
                         }
@@ -287,5 +287,3 @@ fun SubmitButton(
         Text(text = textId, modifier = Modifier.padding(5.dp))
     }
 }
-
-
