@@ -27,6 +27,7 @@ fun SplashScreen(navController: NavController){
         navController.popBackStack()
         navController.navigate("introduction")
     }
+
     Splash()
 }
 
