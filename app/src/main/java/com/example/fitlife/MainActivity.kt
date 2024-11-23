@@ -16,6 +16,7 @@ import com.example.fitlife.presentation.ui.screens.initScreen.InitScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
 import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
 import com.example.fitlife.presentation.ui.screens.login.LoginScreen
+import com.example.fitlife.presentation.ui.screens.profilescreen.ProfileScreen
 import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.presentation.ui.screens.signin.SignInScreen
 import com.example.fitlife.presentation.ui.screens.utils.Constants
@@ -63,7 +64,10 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("SignIn") {
-
+                        SignInScreen(
+                            signUpViewModel = signUpViewModel,
+                            navController = navController
+                        )
                     }
 
                     composable("LogIn") {
@@ -71,6 +75,14 @@ class MainActivity : ComponentActivity() {
                             logInViewModel = logInViewModel,
                             navController = navController
                         )
+                    }
+
+                    composable("InitScreen"){
+                        InitScreen()
+                    }
+
+                    composable("ProfileScreen"){
+                        ProfileScreen()
                     }
 
                     composable("TrainingScreen") {
