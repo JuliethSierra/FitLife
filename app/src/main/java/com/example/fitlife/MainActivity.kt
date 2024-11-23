@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.model.enums.GenderEnum
 import com.example.fitlife.presentation.ui.screens.initScreen.InitScreen
+import com.example.fitlife.presentation.ui.screens.introduction.SplashScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
 import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
 import com.example.fitlife.presentation.ui.screens.login.LoginScreen
@@ -48,8 +49,15 @@ class MainActivity : ComponentActivity() {
             FitLifeTheme {
                 NavHost(
                     navController = navController,
-                    startDestination = "introduction"
+                    startDestination = "SplashScreen"
                 ) {
+
+                    composable("SplashScreen") {
+                        SplashScreen(
+                            navController = navController
+                        )
+                    }
+
                     composable("introduction") {
                         getUsers()
                         WelcomeScreen(
