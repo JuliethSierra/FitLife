@@ -28,7 +28,6 @@ fun SplashScreen(navController: NavController){
         navController.navigate("introduction")
     }
 
-
     Splash()
 }
 
