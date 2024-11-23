@@ -5,10 +5,17 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.model.enums.GenderEnum
@@ -17,6 +24,7 @@ import com.example.fitlife.presentation.ui.screens.introduction.SplashScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
 import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
 import com.example.fitlife.presentation.ui.screens.login.LoginScreen
+import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 import com.example.fitlife.presentation.ui.screens.profilescreen.ProfileScreen
 import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.presentation.ui.screens.signin.SignInScreen
@@ -43,62 +51,70 @@ class MainActivity : ComponentActivity() {
         getUsers()
         setContent {
             val usersState = userViewModel.uiState.collectAsState()
-
             val navController = rememberNavController()
 
             FitLifeTheme {
-                NavHost(
-                    navController = navController,
-                    startDestination = "SplashScreen"
-                ) {
-
-                    composable("SplashScreen") {
-                        SplashScreen(
-                            navController = navController
-                        )
+                Scaffold(
+                    bottomBar = {
+                        val currentRoute = getCurrentRoute(navController)
+                        if (currentRoute in listOf(
+                                "TrainingScreen",
+                                "ProfileScreen",
+                                "InitScreen"
+                            )
+                        ) {
+                            BottomNavigationBar(navController)
+                        }
                     }
+                ) { paddingValues ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = "SplashScreen",
+                        modifier = Modifier.padding(paddingValues)
+                    ) {
 
-                    composable("introduction") {
-                        getUsers()
-                        WelcomeScreen(
-                            usersUiState = usersState,
-                            onRegister = {
-                                navController.navigate("SignIn")
-                            },
-                            onLogin = {
-                                navController.navigate("LogIn")
-                            }
-                        )
-                    }
+                        // Pantallas sin BottomNavigationBar
+                        composable("SplashScreen") {
+                            SplashScreen(navController = navController)
+                        }
 
-                    composable("SignIn") {
-                        SignInScreen(
-                            signUpViewModel = signUpViewModel,
-                            navController = navController
-                        )
-                    }
+                        composable("introduction") {
+                            WelcomeScreen(
+                                usersUiState = usersState,
+                                onRegister = { navController.navigate("SignIn") },
+                                onLogin = { navController.navigate("LogIn") }
+                            )
+                        }
 
-                    composable("LogIn") {
-                        LoginScreen(
-                            logInViewModel = logInViewModel,
-                            navController = navController
-                        )
-                    }
+                        composable("SignIn") {
+                            SignInScreen(
+                                signUpViewModel = signUpViewModel,
+                                navController = navController
+                            )
+                        }
 
-                    composable("InitScreen"){
-                        InitScreen()
-                    }
+                        composable("LogIn") {
+                            LoginScreen(
+                                logInViewModel = logInViewModel,
+                                navController = navController
+                            )
+                        }
 
-                    composable("ProfileScreen"){
-                        ProfileScreen()
-                    }
+                        // Pantallas con BottomNavigationBar
+                        composable("TrainingScreen") {
+                            TrainingScreenWithViewModel()
+                        }
 
-                    composable("TrainingScreen") {
-                        TrainingScreenWithViewModel()
+                        composable("ProfileScreen") {
+                            ProfileScreen()
+                        }
+
+                        composable("InitScreen") {
+                            InitScreen()
+                        }
                     }
                 }
             }
-
         }
     }
 
@@ -106,7 +122,11 @@ class MainActivity : ComponentActivity() {
         userViewModel.loadUsers()
     }
 
-
+    @Composable
+    private fun getCurrentRoute(navController: NavController): String? {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        return navBackStackEntry?.destination?.route
+    }
 
     private suspend fun signUp(user: User): Boolean {
         return if (user.name.isNotEmpty() && user.lastName.isNotEmpty() && user.email.isNotEmpty() &&

@@ -14,7 +14,6 @@ import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 @Composable
 fun InitScreen() {
     Scaffold(
-        bottomBar = { BottomNavigationBar() }
     ) { paddingValues ->
         Box(
             modifier = Modifier
