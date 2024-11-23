@@ -13,7 +13,6 @@ import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 @Composable
 fun ProfileScreen() {
     Scaffold(
-        bottomBar = { BottomNavigationBar() }
     ) { paddingValues ->
         Box(
             modifier = Modifier

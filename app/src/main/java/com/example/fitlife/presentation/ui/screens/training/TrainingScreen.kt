@@ -31,7 +31,6 @@ fun TrainingScreen(viewModel: ExerciseViewModel) {
     Log.d("TrainingScreen", "Ejercicios en la UI: ${exercises.value.size}")
 
     Scaffold(
-        bottomBar = { BottomNavigationBar() }
     ) {
         Column(
             modifier = Modifier
