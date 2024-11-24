@@ -1,5 +1,6 @@
 package com.example.fitlife.presentation.ui.screens.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,8 @@ import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 
 import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
@@ -35,6 +38,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 
 import androidx.compose.runtime.setValue
+import com.example.fitlife.presentation.ui.screens.utils.Constants
 
 
 @Composable
@@ -47,6 +51,9 @@ fun LoginScreen(
     var passwordVisibility by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    val uiState by logInViewModel.uiState.collectAsState()
+    var processLogIn by remember { mutableStateOf(false) }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -95,16 +102,10 @@ fun LoginScreen(
             item {
                 Button(
                     onClick = {
-                        coroutineScope.launch {
-                            logInViewModel.login(emailState.value, passwordState.value) { success, errorMessage ->
-                                if (success) {
-                                    Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                                    navController.navigate("InitScreen") // Cambia por tu pantalla principal
-                                } else {
-                                    Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        }
+                        Log.d(Constants.TAG, "Start to login")
+                        processLogIn = true
+                        Log.d(Constants.TAG, "Login Successful ${processLogIn}")
+                        logInViewModel.login(emailState.value, passwordState.value)
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -113,4 +114,18 @@ fun LoginScreen(
             }
         }
     }
+
+    LaunchedEffect(key1 = uiState.successLogIn) {
+        if (processLogIn) {
+            if (uiState.successLogIn) {
+                Toast.makeText(context, "Login exitoso", Toast.LENGTH_SHORT).show()
+                navController.navigate("InitScreen")
+            } else {
+                Toast.makeText(context, "Error en el login", Toast.LENGTH_SHORT).show()
+            }
+            processLogIn = false
+        }
+    }
 }
+
+
