@@ -18,7 +18,6 @@ class SignUpUseCase @Inject constructor(
         return if (uid != null) {
             user.uid = uid
             userService.saveData(user)
-            true
         } else {
             false
         }

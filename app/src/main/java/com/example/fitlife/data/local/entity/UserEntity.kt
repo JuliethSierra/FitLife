@@ -13,9 +13,7 @@ data class UserEntity(
     val birthDate: String, // Fecha de nacimiento en formato ISO (e.g., "YYYY-MM-DD")
     val gender: String, // Género: "Male", "Female", "Other"
     val weight: Float, // Peso en kilogramos
-    val profilePictureUrl: String? = null, // URL de la foto de perfil (opcional)
-    val numberPhone: String, // Número de teléfono
-    val password: String, // Contraseña
-    val createdAt: Long = System.currentTimeMillis(), // Fecha de registro
-    val lastLogin: Long? = null // Último inicio de sesión (opcional)
+    val profilePictureUrl: String? = null,
+    val numberPhone: String,
+    val password: String,
 )

@@ -127,30 +127,6 @@ class MainActivity : ComponentActivity() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         return navBackStackEntry?.destination?.route
     }
-
-    private suspend fun signUp(user: User): Boolean {
-        return if (user.name.isNotEmpty() && user.lastName.isNotEmpty() && user.email.isNotEmpty() &&
-            user.numberPhone.isNotEmpty() && user.password.isNotEmpty()
-        ) {
-            try {
-                val isSignUpSuccessful = signUpViewModel.signUp(user)
-                if (isSignUpSuccessful) {
-                    Log.d(Constants.TAG, "Registro exitoso: ${user.email}")
-                    Util.showAShortMessage("Registro exitoso", this)
-                } else {
-                    Util.showAShortMessage("Registro fallido", this)
-                }
-                isSignUpSuccessful
-            } catch (e: Exception) {
-                Log.e(Constants.TAG, "Error en el registro: ${e.message}")
-                Util.showAShortMessage("Ocurrió un error durante el registro", this)
-                false
-            }
-        } else {
-            Util.showAShortMessage("Campos vacíos", this)
-            false
-        }
-    }
 }
 
 
