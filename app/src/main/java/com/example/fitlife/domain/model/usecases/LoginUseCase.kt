@@ -7,7 +7,7 @@ class LoginUseCase @Inject constructor(
     private val authenticationService: AuthenticationService,
 ) {
 
-    suspend fun invoke(email: String, password: String) {
-        authenticationService.login(email, password)
+    suspend fun invoke(email: String, password: String): String? {
+        return authenticationService.login(email, password)
     }
 }

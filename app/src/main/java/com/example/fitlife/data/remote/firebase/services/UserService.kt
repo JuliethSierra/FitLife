@@ -18,7 +18,7 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
 
     private var downloadUrl: String = ""
 
-    suspend fun saveData(user: User) {
+    suspend fun saveData(user: User): Boolean {
         val data = hashMapOf(
             "name" to user.name,
             "lastName" to user.lastName,
@@ -31,7 +31,12 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
             "numberPhone" to user.numberPhone,
             "uid" to user.uid
         )
-        firebaseClient.firestore.collection(Constants.COLLECTION_USERS).add(data)
+
+        val response = firebaseClient.firestore.collection(Constants.COLLECTION_USERS).add(data).await()
+
+        Log.d(Constants.TAG, "The response is: ${response != null}")
+
+        return response != null
     }
 
 

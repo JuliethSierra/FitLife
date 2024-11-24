@@ -1,5 +1,7 @@
 package com.example.fitlife.presentation.ui.screens.signin
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,12 +37,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 
 import androidx.compose.runtime.getValue
 
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.example.fitlife.R
+import com.example.fitlife.presentation.ui.components.buttons.SubmitButton
+import com.example.fitlife.presentation.ui.screens.utils.Constants
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun SignInScreen(
     navController: NavController,
@@ -57,7 +66,9 @@ fun SignInScreen(
     val password = remember { mutableStateOf("12345678") }
     val confirmPassword = remember { mutableStateOf("12345678") }
 
-    val coroutineScope = rememberCoroutineScope()
+    val uiState by signUpViewModel.uiState.collectAsState()
+    var processSignUp by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
 
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -89,11 +100,19 @@ fun SignInScreen(
             }
 
             item {
-                InputField(valueState = height, labelId = "Altura (cm)", keyboardType = KeyboardType.Number)
+                InputField(
+                    valueState = height,
+                    labelId = "Altura (cm)",
+                    keyboardType = KeyboardType.Number
+                )
             }
 
             item {
-                InputField(valueState = weight, labelId = "Peso (kg)", keyboardType = KeyboardType.Number)
+                InputField(
+                    valueState = weight,
+                    labelId = "Peso (kg)",
+                    keyboardType = KeyboardType.Number
+                )
             }
 
             item {
@@ -105,7 +124,11 @@ fun SignInScreen(
             }
 
             item {
-                InputField(valueState = numberPhone, labelId = "Número de Teléfono", keyboardType = KeyboardType.Phone)
+                InputField(
+                    valueState = numberPhone,
+                    labelId = "Número de Teléfono",
+                    keyboardType = KeyboardType.Phone
+                )
             }
 
             item {
@@ -124,7 +147,7 @@ fun SignInScreen(
 
             item {
                 SubmitButton(
-                    textId = "Registrar",
+                    textId = stringResource(id = R.string.text_sign_up),
                     inputValid = name.value.isNotBlank() &&
                             lastName.value.isNotBlank() &&
                             email.value.isNotBlank() &&
@@ -152,17 +175,23 @@ fun SignInScreen(
                         password = password.value
                     )
 
-                    coroutineScope.launch {
-                        val success = signUpViewModel.signUp(user)
-                        if (success) {
-                            Toast.makeText(context, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show()
-                            navController.navigate("LogIn")
-                        } else {
-                            Toast.makeText(context, "Error al registrar el usuario", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    Log.d(Constants.TAG, "Start to signUp")
+                    processSignUp = true
+                    signUpViewModel.signUp(user)
                 }
             }
+        }
+    }
+
+    LaunchedEffect(key1 = uiState.isSuccessful) {
+        if (processSignUp) {
+            if (uiState.isSuccessful) {
+                Toast.makeText(context, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show()
+                navController.navigate("LogIn")
+            } else {
+                Toast.makeText(context, "Error al registrar el usuario", Toast.LENGTH_SHORT).show()
+            }
+            processSignUp = false
         }
     }
 }
@@ -197,7 +226,8 @@ fun PasswordInput(
         singleLine = true,
         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
-            val image = if (passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff
+            val image =
+                if (passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff
             IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                 Icon(imageVector = image, contentDescription = null)
             }
@@ -237,13 +267,15 @@ fun InputField(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
     )
 }
+
 @Composable
 fun PasswordInput(
     passwordState: MutableState<String>,
     labelId: String,
     passwordVisible: MutableState<Boolean>
 ) {
-    val visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+    val visualTransformation =
+        if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
     OutlinedTextField(
         value = passwordState.value,
         onValueChange = { passwordState.value = it },
@@ -267,23 +299,5 @@ fun PasswordVisibleIcon(passwordVisible: MutableState<Boolean>) {
     val image = if (passwordVisible.value) Icons.Default.VisibilityOff else Icons.Default.Visibility
     IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
         Icon(imageVector = image, contentDescription = null)
-    }
-}
-
-@Composable
-fun SubmitButton(
-    textId: String,
-    inputValid: Boolean,
-    onClick: () -> Unit
-) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .padding(3.dp)
-            .fillMaxWidth(),
-        shape = CircleShape,
-        enabled = inputValid
-    ) {
-        Text(text = textId, modifier = Modifier.padding(5.dp))
     }
 }
