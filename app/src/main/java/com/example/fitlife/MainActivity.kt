@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("InitScreen") {
-                            InitScreen()
+                            InitScreen(navController = navController)
                         }
                     }
                 }

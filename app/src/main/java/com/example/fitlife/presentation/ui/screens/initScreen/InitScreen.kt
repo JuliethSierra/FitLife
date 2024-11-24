@@ -1,5 +1,6 @@
 package com.example.fitlife.presentation.ui.screens.initScreen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -11,12 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+
+
 
 @Composable
-fun InitScreen() {
+fun InitScreen(navController: NavController) {
+    val context = LocalContext.current
     val purple = Color(0xFFAC44F2)
     val orange = Color(0xFFF28B0C)
     val white = Color(0xFFFFFFFF)
@@ -104,6 +109,10 @@ fun InitScreen() {
             }
         }
     }
+
+    BackHandler {
+        (context as? android.app.Activity)?.finish()
+    }
 }
 
 @Composable
@@ -130,9 +139,4 @@ fun StatItem(value: String, label: String, backgroundColor: Color, textColor: Co
     }
 }
 
-@Preview
-@Composable
-fun ProgressScreenPreview() {
-    InitScreen()
-}
 
