@@ -1,7 +1,6 @@
 package com.example.fitlife
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -11,33 +10,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.fitlife.domain.model.User
-import com.example.fitlife.domain.model.enums.GenderEnum
-import com.example.fitlife.presentation.ui.screens.initScreen.InitScreen
 import com.example.fitlife.presentation.ui.screens.introduction.SplashScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
 import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
 import com.example.fitlife.presentation.ui.screens.login.LoginScreen
 import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 import com.example.fitlife.presentation.ui.screens.profilescreen.ProfileScreen
+import com.example.fitlife.presentation.ui.screens.initScreen.InitScreen
 import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.presentation.ui.screens.signin.SignInScreen
-import com.example.fitlife.presentation.ui.screens.utils.Constants
-import com.example.fitlife.presentation.ui.screens.utils.Util
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import com.example.fitlife.presentation.viewmodel.SignUpViewModel
-import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.ui.theme.FitLifeTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
