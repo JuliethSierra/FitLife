@@ -36,7 +36,7 @@ class AuthenticationService @Inject constructor(private val firebaseClient: Fire
             return if(result.user != null){
                 Log.d(Constants.TAG, "Login Successful ${result.user?.uid}")
                 result.user?.uid
-            }else{
+            } else {
                 Log.d(Constants.TAG, "Login Failed")
                 null
             }

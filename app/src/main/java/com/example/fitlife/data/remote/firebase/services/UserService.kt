@@ -3,13 +3,10 @@ package com.example.fitlife.data.remote.firebase.services
 import android.net.Uri
 import android.util.Log
 import com.example.fitlife.data.remote.firebase.FirebaseClient
+import com.example.fitlife.data.remote.firebase.mappers.toUser
 import com.example.fitlife.domain.model.User
-import com.example.fitlife.domain.model.enums.GenderEnum
 import com.example.fitlife.presentation.ui.screens.utils.Constants
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
-import java.util.TreeMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -65,17 +62,24 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
         return downloadUrl
     }
 
+    suspend fun getUserByUid(uid: String): User? {
+        return try {
+            val response = firebaseClient.firestore
+                .collection(Constants.COLLECTION_USERS)
+                .whereEqualTo("uid", uid)
+                .get()
+                .await()
 
-
- /*   suspend fun getUserByUid(uid: String): UserSP? {
-        val user =
-            firebaseClient.firestore.collection(Constants.COLLECTION_USERS).whereEqualTo("uid", uid)
-                .get().await().documents[0]
-
-        var path = user.reference.path
-        var role = Util.adaptRole(user.getString("role"))
-
-        return role?.let { UserSP(path, it, uid) }
-    }*/
+            if (!response.isEmpty) {
+                val document = response.documents[0]
+                document.toUser()
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "Error getting user by UID: ${e.message}", e)
+            null
+        }
+    }
 
 }

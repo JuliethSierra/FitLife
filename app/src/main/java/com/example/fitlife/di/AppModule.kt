@@ -5,7 +5,11 @@ import androidx.room.Room
 import com.example.fitlife.data.local.dao.UserDao
 import com.example.fitlife.data.local.database.FitLifeDatabase
 import com.example.fitlife.data.remote.ExerciseApiService
+import com.example.fitlife.data.remote.firebase.services.AuthenticationService
+import com.example.fitlife.data.remote.firebase.services.UserService
+import com.example.fitlife.data.repository.AuthRepositoryImpl
 import com.example.fitlife.data.repository.ExerciseRepositoryImpl
+import com.example.fitlife.domain.repository.AuthRepository
 import com.example.fitlife.domain.repository.ExerciseRepository
 import dagger.Module
 import dagger.Provides
@@ -53,5 +57,16 @@ object AppModule {
     fun provideExerciseRepository(apiService: ExerciseApiService): ExerciseRepository {
         return ExerciseRepositoryImpl(apiService)
     }
+
+    @Provides
+    @Singleton
+    fun providesAuthRepository(
+        authenticationService: AuthenticationService,
+        userService: UserService,
+        userDao: UserDao
+    ): AuthRepository {
+        return AuthRepositoryImpl(authenticationService, userService, userDao)
+    }
+
 }
 

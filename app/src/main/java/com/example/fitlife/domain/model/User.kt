@@ -7,7 +7,7 @@ data class User(
     val lastName: String,
     val email: String,
     val height: Float,
-    val birthDate: String, // Fecha de nacimiento en formato ISO (e.g., "YYYY-MM-DD")
+    val birthDate: String,
     val gender: GenderEnum,
     val weight: Float,
     val profilePictureUrl: String? = null,

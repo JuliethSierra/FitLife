@@ -24,9 +24,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    navController: NavController,
+    logInViewModel: LogInScreenViewModel
+) {
     // Definición de colores
     val purple = Color(0xFFAC44F2)
     val blue = Color(0xFF3876F2)
@@ -126,7 +131,10 @@ fun ProfileScreen() {
 
         // Botón de cerrar sesión
         Button(
-            onClick = { /* Logout action */ },
+            onClick = {
+                logInViewModel.signOut()
+                navController.navigate("introduction")
+            },
             colors = ButtonDefaults.buttonColors(backgroundColor = purple),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
@@ -178,10 +186,4 @@ fun AdditionalInfoItem(icon: ImageVector, label: String, value: String, iconColo
             color = Color.Black
         )
     }
-}
-
-@Preview
-@Composable
-fun UserProfileScreenPreview() {
-    ProfileScreen()
 }

@@ -5,15 +5,15 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table")
 data class UserEntity(
-    @PrimaryKey val uid: String, // ID único del usuario
-    val name: String, // Nombre
-    val lastName: String, // Apellido
-    val email: String, // Correo electrónico
-    val height: Float, // Estatura en centímetros
-    val birthDate: String, // Fecha de nacimiento en formato ISO (e.g., "YYYY-MM-DD")
-    val gender: String, // Género: "Male", "Female", "Other"
-    val weight: Float, // Peso en kilogramos
+    @PrimaryKey val uid: String,
+    val name: String,
+    val lastName: String,
+    val email: String,
+    val height: Float,
+    val birthDate: String,
+    val gender: String,
+    val weight: Float,
     val profilePictureUrl: String? = null,
     val numberPhone: String,
-    val password: String,
+    val password: String
 )

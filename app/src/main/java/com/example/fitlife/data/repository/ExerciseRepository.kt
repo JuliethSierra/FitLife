@@ -5,8 +5,7 @@ import com.example.fitlife.domain.model.Exercise
 import com.example.fitlife.domain.repository.ExerciseRepository
 import javax.inject.Inject
 
-
-class ExerciseRepositoryImpl  @Inject constructor (
+class ExerciseRepositoryImpl @Inject constructor (
     private val exerciseRemoteDataSource: ExerciseApiService
 ) : ExerciseRepository {
     override suspend fun getExerciseByName(name: String): List<Exercise> {
