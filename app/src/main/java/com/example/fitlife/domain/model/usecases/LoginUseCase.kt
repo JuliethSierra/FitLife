@@ -1,13 +1,12 @@
 package com.example.fitlife.domain.model.usecases
 
-import com.example.fitlife.data.remote.firebase.services.AuthenticationService
+import com.example.fitlife.domain.model.User
+import com.example.fitlife.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
-    private val authenticationService: AuthenticationService,
+    private val authRepository: AuthRepository
 ) {
-
-    suspend fun invoke(email: String, password: String): String? {
-        return authenticationService.login(email, password)
-    }
+    suspend fun invoke(email: String, password: String): User? =
+        authRepository.login(email, password)
 }

@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
 
                         // Pantallas sin BottomNavigationBar
                         composable("SplashScreen") {
-                            SplashScreen(navController = navController)
+                            SplashScreen(navController = navController, logInViewModel)
                         }
 
                         composable("introduction") {
@@ -96,7 +96,10 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("ProfileScreen") {
-                            ProfileScreen()
+                            ProfileScreen(
+                                logInViewModel = logInViewModel,
+                                navController = navController
+                            )
                         }
 
                         composable("InitScreen") {

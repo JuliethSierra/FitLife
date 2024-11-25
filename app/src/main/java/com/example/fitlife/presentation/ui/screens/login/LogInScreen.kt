@@ -89,7 +89,8 @@ fun LoginScreen(
                     singleLine = true,
                     visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        val image = if (passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                        val image =
+                            if (passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff
                         IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                             Icon(imageVector = image, contentDescription = null)
                         }
@@ -115,9 +116,9 @@ fun LoginScreen(
         }
     }
 
-    LaunchedEffect(key1 = uiState.successLogIn) {
+    LaunchedEffect(key1 = uiState.userUiState) {
         if (processLogIn) {
-            if (uiState.successLogIn) {
+            if (uiState.userUiState != null) {
                 Toast.makeText(context, "Login exitoso", Toast.LENGTH_SHORT).show()
                 navController.navigate("InitScreen")
             } else {

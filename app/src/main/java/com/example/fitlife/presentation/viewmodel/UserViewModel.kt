@@ -2,7 +2,7 @@ package com.example.fitlife.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitlife.data.repository.UserRepository
+import com.example.fitlife.data.repository.AuthRepositoryImpl
 import com.example.fitlife.presentation.ui.screens.states.UserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val repository: UserRepository
+    private val repository: AuthRepositoryImpl
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UserUiState())

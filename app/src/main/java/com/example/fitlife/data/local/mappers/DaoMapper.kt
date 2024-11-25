@@ -12,7 +12,7 @@ fun User.toUserEntity(): UserEntity {
         email = email,
         height = height,
         birthDate = birthDate,
-        gender = gender.name, // Convierte GenderEnum a String para almacenarlo
+        gender = gender.name,
         weight = weight,
         profilePictureUrl = profilePictureUrl,
         numberPhone = numberPhone,
