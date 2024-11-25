@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.model.enums.GenderEnum
+import com.example.fitlife.presentation.ui.screens.advances.AdvancesScreen
 import com.example.fitlife.presentation.ui.screens.initScreen.InitScreen
 import com.example.fitlife.presentation.ui.screens.introduction.SplashScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
@@ -60,6 +61,7 @@ class MainActivity : ComponentActivity() {
                         if (currentRoute in listOf(
                                 "TrainingScreen",
                                 "ProfileScreen",
+                                "AdvancesScreen",
                                 "InitScreen"
                             )
                         ) {
@@ -72,8 +74,6 @@ class MainActivity : ComponentActivity() {
                         startDestination = "SplashScreen",
                         modifier = Modifier.padding(paddingValues)
                     ) {
-
-                        // Pantallas sin BottomNavigationBar
                         composable("SplashScreen") {
                             SplashScreen(navController = navController)
                         }
@@ -104,11 +104,12 @@ class MainActivity : ComponentActivity() {
                         composable("TrainingScreen") {
                             TrainingScreenWithViewModel()
                         }
-
+                        composable("AdvancesScreen") {
+                            AdvancesScreen()
+                        }
                         composable("ProfileScreen") {
                             ProfileScreen()
                         }
-
                         composable("InitScreen") {
                             InitScreen()
                         }

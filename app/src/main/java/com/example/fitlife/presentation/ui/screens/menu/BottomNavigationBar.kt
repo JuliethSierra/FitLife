@@ -1,19 +1,18 @@
 package com.example.fitlife.presentation.ui.screens.menu
 
-import androidx.compose.foundation.layout.fillMaxWidth
+
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -24,10 +23,16 @@ fun BottomNavigationBar(navController: NavController) {
             title = "Home",
             icon = Icons.Filled.Home,
             route = "InitScreen"
-        ),BottomNavItem(
+        ),
+        BottomNavItem(
             title = "Training",
             icon = Icons.Filled.Settings,
             route = "TrainingScreen"
+        ),
+        BottomNavItem(
+            title = "Advances",
+            icon = Icons.Filled.FitnessCenter,
+            route = "AdvancesScreen"
         ),
         BottomNavItem(
             title = "Profile",
@@ -35,7 +40,10 @@ fun BottomNavigationBar(navController: NavController) {
             route = "ProfileScreen"
         ),
     )
-    BottomNavigation {
+    BottomNavigation(
+        backgroundColor = Color(0xF0B34AF1), // Tu color personalizado
+        contentColor = Color.White // Color de contenido, como texto e íconos
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
