@@ -1,4 +1,4 @@
-package com.example.fitlife.presentation.ui.screens.signin
+package com.example.fitlife.presentation.ui.screens.signup
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,13 +29,10 @@ import androidx.compose.ui.unit.dp
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.model.enums.GenderEnum
 import com.example.fitlife.presentation.viewmodel.SignUpViewModel
-import kotlinx.coroutines.launch
 
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 
