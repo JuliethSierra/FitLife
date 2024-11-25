@@ -1,4 +1,4 @@
-package com.example.fitlife.presentation.ui.screens.initScreen
+package com.example.fitlife.presentation.ui.screens.initscreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background

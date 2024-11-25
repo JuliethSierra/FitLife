@@ -21,9 +21,9 @@ import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
 import com.example.fitlife.presentation.ui.screens.login.LoginScreen
 import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 import com.example.fitlife.presentation.ui.screens.profilescreen.ProfileScreen
-import com.example.fitlife.presentation.ui.screens.initScreen.InitScreen
+import com.example.fitlife.presentation.ui.screens.initscreen.InitScreen
 import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
-import com.example.fitlife.presentation.ui.screens.signin.SignInScreen
+import com.example.fitlife.presentation.ui.screens.signup.SignInScreen
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import com.example.fitlife.presentation.viewmodel.SignUpViewModel
 import com.example.fitlife.ui.theme.FitLifeTheme
