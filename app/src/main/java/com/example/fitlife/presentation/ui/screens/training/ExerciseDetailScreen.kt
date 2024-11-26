@@ -3,6 +3,7 @@ package com.example.fitlife.presentation.ui.screens.training
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,44 +47,47 @@ fun ExerciseDetailScreen(
 
     if (exerciseDetail != null) {
         Scaffold {
-            Card(
-                elevation = 4.dp,
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(color = Color.White)
             ) {
-                Column(
+                androidx.compose.material.Text(
+                    text = "${exerciseDetail!!.name}",
+                    style = MaterialTheme.typography.h5,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data("${exerciseDetail!!.gifUrl}")
+                        .decoderFactory(ImageDecoderDecoder.Factory())
+                        .build(),
+                    contentDescription = "Exercise GIF",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp),
-                ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data("${exerciseDetail!!.gifUrl}")
-                            .decoderFactory(ImageDecoderDecoder.Factory())
-                            .build(),
-                        contentDescription = "Exercise GIF",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                    )
-                    Text(
-                        text = "${exerciseDetail!!.name}",
-                        style = MaterialTheme.typography.h5,
-                    )
-                    Text(text = "Instructions: ${exerciseDetail!!.instructions.joinToString("\n")}")
-                }
+                        .height(200.dp)
+                )
+                Text(
+                    text = "Instructions: ${exerciseDetail!!.instructions.joinToString("\n")}",
+                    style = MaterialTheme.typography.body1,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "Muscles: ${exerciseDetail!!.secondaryMuscles.joinToString("\n")}",
+                    style = MaterialTheme.typography.body1,
+                    color = Color.Gray
+                )
             }
         }
     } else {
-        Box(
+        Text(
+            text = "Loading...",
+            style = MaterialTheme.typography.h6,
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ){
-            CircularProgressIndicator(
-                modifier = Modifier.width(64.dp),
-                color = MaterialTheme.colors.primary,
-            )
-        }
+            color = Color.Gray
+        )
     }
 }
 
