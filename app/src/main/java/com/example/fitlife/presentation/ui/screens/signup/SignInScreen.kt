@@ -39,16 +39,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.fitlife.R
 import com.example.fitlife.presentation.ui.components.buttons.SubmitButton
-import com.example.fitlife.presentation.ui.components.dropdownmenu.GenderDropdownMenu
 import com.example.fitlife.presentation.ui.screens.utils.Constants
-import com.example.fitlife.ui.theme.purple
-import com.example.fitlife.ui.theme.white
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -56,13 +51,12 @@ fun SignInScreen(
     navController: NavController,
     signUpViewModel: SignUpViewModel
 ) {
-    // Aquí se maneja el estado mutable de los campos
     val name = remember { mutableStateOf("Andrea") }
     val lastName = remember { mutableStateOf("Sierra") }
     val email = remember { mutableStateOf("a@s.com") }
     val height = remember { mutableStateOf("164") }
     val birthDate = remember { mutableStateOf("2002/05/22") }
-    val gender = remember { mutableStateOf(GenderEnum.FEMALE) }
+    val gender = remember { mutableStateOf("F") }
     val weight = remember { mutableStateOf("60") }
     val numberPhone = remember { mutableStateOf("3219834716") }
     val password = remember { mutableStateOf("12345678") }
@@ -73,24 +67,79 @@ fun SignInScreen(
 
     val context = LocalContext.current
 
-    Surface(modifier = Modifier.fillMaxSize(), color = white) {
+    Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item { InputField(valueState = name, labelId = "Nombre") }
-            item { InputField(valueState = lastName, labelId = "Apellido") }
-            item { EmailInput(emailState = email) }
-            item { InputField(valueState = height, labelId = "Altura (cm)", keyboardType = KeyboardType.Number) }
-            item { InputField(valueState = weight, labelId = "Peso (kg)", keyboardType = KeyboardType.Number) }
-            item { InputField(valueState = birthDate, labelId = "Fecha de Nacimiento (yyyy/MM/dd)") }
-            item { GenderDropdownMenu(selectedGender = gender, labelId = "Género") } // Dropdown de género
-            //item { GenderDropdownMenu() } // Dropdown de género
+            item {
+                Text(
+                    text = "¡Regístrate!",
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                )
+            }
 
-            item { InputField(valueState = numberPhone, labelId = "Número de Teléfono", keyboardType = KeyboardType.Phone) }
-            item { PasswordInput(passwordState = password, labelId = "Contraseña") }
-            item { PasswordInput(passwordState = confirmPassword, labelId = "Confirmar Contraseña") }
+            item {
+                InputField(valueState = name, labelId = "Nombre")
+            }
+
+            item {
+                InputField(valueState = lastName, labelId = "Apellido")
+            }
+
+            item {
+                EmailInput(emailState = email)
+            }
+
+            item {
+                InputField(
+                    valueState = height,
+                    labelId = "Altura (cm)",
+                    keyboardType = KeyboardType.Number
+                )
+            }
+
+            item {
+                InputField(
+                    valueState = weight,
+                    labelId = "Peso (kg)",
+                    keyboardType = KeyboardType.Number
+                )
+            }
+
+            item {
+                InputField(valueState = birthDate, labelId = "Fecha de Nacimiento (yyyy/MM/dd)")
+            }
+
+            item {
+                InputField(valueState = gender, labelId = "Género")
+            }
+
+            item {
+                InputField(
+                    valueState = numberPhone,
+                    labelId = "Número de Teléfono",
+                    keyboardType = KeyboardType.Phone
+                )
+            }
+
+            item {
+                PasswordInput(
+                    passwordState = password,
+                    labelId = "Contraseña"
+                )
+            }
+
+            item {
+                PasswordInput(
+                    passwordState = confirmPassword,
+                    labelId = "Confirmar Contraseña"
+                )
+            }
 
             item {
                 SubmitButton(
@@ -101,7 +150,7 @@ fun SignInScreen(
                             height.value.isNotBlank() &&
                             weight.value.isNotBlank() &&
                             birthDate.value.isNotBlank() &&
-                            gender.value.name.isNotBlank() &&
+                            gender.value.isNotBlank() &&
                             numberPhone.value.isNotBlank() &&
                             password.value.isNotBlank() &&
                             confirmPassword.value.isNotBlank() &&
@@ -113,7 +162,8 @@ fun SignInScreen(
                         email = email.value,
                         height = height.value.toFloatOrNull() ?: 0f,
                         birthDate = birthDate.value,
-                        gender = gender.value,
+                        gender = GenderEnum.values().find { it.name.equals(gender.value, true) }
+                            ?: GenderEnum.MALE,
                         weight = weight.value.toFloatOrNull() ?: 0f,
                         numberPhone = numberPhone.value,
                         profilePictureUrl = null,
@@ -121,8 +171,9 @@ fun SignInScreen(
                         password = password.value
                     )
 
-                    signUpViewModel.signUp(user)
+                    Log.d(Constants.TAG, "Start to signUp")
                     processSignUp = true
+                    signUpViewModel.signUp(user)
                 }
             }
         }
@@ -150,10 +201,9 @@ fun InputField(
     OutlinedTextField(
         value = valueState.value,
         onValueChange = { valueState.value = it },
-        label = { Text(text = labelId, color = purple) },
+        label = { Text(text = labelId) },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-        textStyle = androidx.compose.material3.MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
         modifier = Modifier.fillMaxWidth()
     )
 }
@@ -168,7 +218,7 @@ fun PasswordInput(
     OutlinedTextField(
         value = passwordState.value,
         onValueChange = { passwordState.value = it },
-        label = { Text(text = labelId, color = purple) },
+        label = { Text(text = labelId) },
         singleLine = true,
         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
@@ -179,8 +229,7 @@ fun PasswordInput(
             }
         },
         modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
-                textStyle = MaterialTheme.typography.h5.copy(color = Color.Black)
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
     )
 }
 

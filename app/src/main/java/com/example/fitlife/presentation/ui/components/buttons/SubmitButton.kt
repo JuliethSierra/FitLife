@@ -8,8 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.fitlife.ui.theme.purple
-import com.example.fitlife.ui.theme.white
 
 @Composable
 fun SubmitButton(
@@ -18,10 +16,6 @@ fun SubmitButton(
     onClick: () -> Unit
 ) {
     Button(
-        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-            containerColor = purple,
-            contentColor = white
-        ),
         onClick = onClick,
         modifier = Modifier
             .padding(3.dp)
