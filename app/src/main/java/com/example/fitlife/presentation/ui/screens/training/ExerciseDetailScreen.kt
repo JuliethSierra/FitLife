@@ -1,5 +1,6 @@
 package com.example.fitlife.presentation.ui.screens.training
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
@@ -29,6 +30,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import com.example.fitlife.presentation.viewmodel.ExerciseViewModel
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun ExerciseDetailScreen(
@@ -42,12 +44,11 @@ fun ExerciseDetailScreen(
     }
 
     if (exerciseDetail != null) {
-        Scaffold { paddingValues ->
+        Scaffold {
             Card(
                 elevation = 4.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(paddingValues)
             ) {
                 Column(
                     modifier = Modifier
