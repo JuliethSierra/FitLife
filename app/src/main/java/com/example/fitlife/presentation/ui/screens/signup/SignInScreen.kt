@@ -29,24 +29,18 @@ import androidx.compose.ui.unit.dp
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.model.enums.GenderEnum
 import com.example.fitlife.presentation.viewmodel.SignUpViewModel
-
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-
 import androidx.compose.runtime.getValue
-
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.fitlife.R
 import com.example.fitlife.presentation.ui.components.buttons.SubmitButton
 import com.example.fitlife.presentation.ui.components.dropdownmenu.GenderDropdownMenu
-import com.example.fitlife.presentation.ui.screens.utils.Constants
 import com.example.fitlife.ui.theme.purple
 import com.example.fitlife.ui.theme.white
 
