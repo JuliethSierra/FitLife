@@ -20,7 +20,7 @@ import androidx.navigation.navArgument
 import com.example.fitlife.presentation.ui.screens.advances.AdvancesScreen
 import com.example.fitlife.presentation.ui.screens.introduction.SplashScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
-import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
+import com.example.fitlife.presentation.ui.screens.introduction.IntroductionScreen
 import com.example.fitlife.presentation.ui.screens.login.LoginScreen
 import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 import com.example.fitlife.presentation.ui.screens.profilescreen.ProfileScreen
@@ -75,8 +75,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("introduction") {
-                            WelcomeScreen(
-                                usersUiState = usersState,
+                            IntroductionScreen(
                                 onRegister = { navController.navigate("SignIn") },
                                 onLogin = { navController.navigate("LogIn") }
                             )
