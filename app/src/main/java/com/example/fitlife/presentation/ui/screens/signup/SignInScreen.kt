@@ -56,7 +56,6 @@ fun SignInScreen(
     navController: NavController,
     signUpViewModel: SignUpViewModel
 ) {
-    // Aquí se maneja el estado mutable de los campos
     val name = remember { mutableStateOf("Andrea") }
     val lastName = remember { mutableStateOf("Sierra") }
     val email = remember { mutableStateOf("a@s.com") }
@@ -85,8 +84,7 @@ fun SignInScreen(
             item { InputField(valueState = height, labelId = "Altura (cm)", keyboardType = KeyboardType.Number) }
             item { InputField(valueState = weight, labelId = "Peso (kg)", keyboardType = KeyboardType.Number) }
             item { InputField(valueState = birthDate, labelId = "Fecha de Nacimiento (yyyy/MM/dd)") }
-            item { GenderDropdownMenu(selectedGender = gender, labelId = "Género") } // Dropdown de género
-            //item { GenderDropdownMenu() } // Dropdown de género
+            item { GenderDropdownMenu(selectedGender = gender, labelId = "Género") }
 
             item { InputField(valueState = numberPhone, labelId = "Número de Teléfono", keyboardType = KeyboardType.Phone) }
             item { PasswordInput(passwordState = password, labelId = "Contraseña") }

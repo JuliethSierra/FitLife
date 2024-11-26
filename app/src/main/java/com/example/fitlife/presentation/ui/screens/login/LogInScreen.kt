@@ -44,7 +44,7 @@ fun LoginScreen(
     navController: NavController,
     logInViewModel: LogInScreenViewModel
 ) {
-    val emailState = remember { mutableStateOf("a@s.com") }
+    val emailState = remember { mutableStateOf("a123a@s.com") }
     val passwordState = remember { mutableStateOf("12345678") }
     var passwordVisibility by remember { mutableStateOf(false) }
     val context = LocalContext.current

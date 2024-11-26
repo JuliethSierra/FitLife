@@ -16,16 +16,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-
+import com.example.fitlife.data.repository.AuthRepositoryImpl
+import com.example.fitlife.ui.theme.lightGrayBlue
+import com.example.fitlife.ui.theme.purple
+import com.example.fitlife.ui.theme.white
+import com.example.fitlife.ui.theme.yellowAccent
 
 
 @Composable
 fun InitScreen(navController: NavController) {
     val context = LocalContext.current
-    val purple = Color(0xFFAC44F2)
-    val orange = Color(0xFFF28B0C)
-    val white = Color(0xFFFFFFFF)
-    val lightGrayBlue = Color(0xFF88A5BF)
+
+    val user = AuthRepositoryImpl.currentUser
 
     Column(
         modifier = Modifier
@@ -55,7 +57,7 @@ fun InitScreen(navController: NavController) {
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Hola Andrea!",
+                text = "Hola ${user?.name}!",
                 style = MaterialTheme.typography.headlineSmall,
                 color = Color.Black
             )
@@ -67,7 +69,7 @@ fun InitScreen(navController: NavController) {
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
                 .background(white, RoundedCornerShape(8.dp))
-                .border(2.dp, orange, RoundedCornerShape(8.dp))
+                .border(2.dp, yellowAccent, RoundedCornerShape(8.dp))
                 .padding(12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -89,13 +91,13 @@ fun InitScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(white, RoundedCornerShape(12.dp))
-                .border(2.dp, orange, RoundedCornerShape(12.dp))
+                .border(2.dp, yellowAccent, RoundedCornerShape(12.dp))
                 .padding(16.dp)
         ) {
             Text(
                 text = "EN EL ÚLTIMO MES",
                 style = MaterialTheme.typography.titleLarge,
-                color = orange,
+                color = yellowAccent,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
