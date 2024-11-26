@@ -44,7 +44,7 @@ fun ExerciseDetailScreen(
                     .fillMaxWidth()
                     .padding(paddingValues)
             ) {
-                Column (
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
@@ -52,7 +52,7 @@ fun ExerciseDetailScreen(
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("${exerciseDetail!!.gifUrl}")
-                            .decoderFactory(ImageDecoderDecoder.Factory()) // Para API 28+ (Android 9+)
+                            .decoderFactory(ImageDecoderDecoder.Factory())
                             .build(),
                         contentDescription = "Exercise GIF",
                         modifier = Modifier
