@@ -1,7 +1,6 @@
 package com.example.fitlife.presentation.ui.screens.login
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,20 +24,17 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
-
-
 import android.widget.Toast
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.launch
-
 import androidx.compose.runtime.getValue
-
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.fitlife.presentation.ui.screens.utils.Constants
+import com.example.fitlife.ui.theme.purple
+import com.example.fitlife.ui.theme.white
 
 
 @Composable
@@ -46,76 +42,98 @@ fun LoginScreen(
     navController: NavController,
     logInViewModel: LogInScreenViewModel
 ) {
-    val emailState = remember { mutableStateOf("a@s.com") }
+    val emailState = remember { mutableStateOf("a123a@s.com") }
     val passwordState = remember { mutableStateOf("12345678") }
     var passwordVisibility by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val uiState by logInViewModel.uiState.collectAsState()
     var processLogIn by remember { mutableStateOf(false) }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
+    Surface(modifier = Modifier.fillMaxSize(), color = white) {
+        ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(16.dp)
         ) {
-            item {
-                Text(
-                    text = "Iniciar Sesión",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-            }
+            val (title, emailField, passwordField, loginButton) = createRefs()
 
-            item {
-                OutlinedTextField(
-                    value = emailState.value,
-                    onValueChange = { emailState.value = it },
-                    label = { Text("Correo Electrónico") },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+            // Centrar el grupo de elementos verticalmente
+            val guideline = createGuidelineFromTop(0.3f)
 
-            item {
-                OutlinedTextField(
-                    value = passwordState.value,
-                    onValueChange = { passwordState.value = it },
-                    label = { Text("Contraseña") },
-                    singleLine = true,
-                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
-                        val image =
-                            if (passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff
-                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
-                            Icon(imageVector = image, contentDescription = null)
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = androidx.compose.ui.text.input.KeyboardType.Password)
-                )
-            }
-
-            item {
-                Button(
-                    onClick = {
-                        Log.d(Constants.TAG, "Start to login")
-                        processLogIn = true
-                        Log.d(Constants.TAG, "Login Successful ${processLogIn}")
-                        logInViewModel.login(emailState.value, passwordState.value)
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Iniciar Sesión")
+            Text(
+                text = "Iniciar Sesión",
+                style = MaterialTheme.typography.headlineMedium,
+                color = purple, // Color morado del tema
+                modifier = Modifier.constrainAs(title) {
+                    top.linkTo(guideline)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                 }
+            )
+
+            OutlinedTextField(
+                value = emailState.value,
+                onValueChange = { emailState.value = it },
+                label = { Text("Correo Electrónico", color = purple)},
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default,
+                textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(emailField) {
+                        top.linkTo(title.bottom, margin = 16.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            )
+
+            OutlinedTextField(
+                value = passwordState.value,
+                onValueChange = { passwordState.value = it },
+                label = { Text("Contraseña", color = purple) },
+                textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
+                singleLine = true,
+                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    val image =
+                        if (passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                        Icon(imageVector = image, contentDescription = null)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(passwordField) {
+                        top.linkTo(emailField.bottom, margin = 16.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = androidx.compose.ui.text.input.KeyboardType.Password)
+            )
+
+            Button(
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = purple,
+                    contentColor = white
+                ),
+                onClick = {
+                    Log.d(Constants.TAG, "Start to login")
+                    processLogIn = true
+                    logInViewModel.login(emailState.value, passwordState.value)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(loginButton) {
+                        top.linkTo(passwordField.bottom, margin = 16.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            ) {
+                Text(text = "Iniciar Sesión", color = white)
             }
         }
     }
-
     LaunchedEffect(key1 = uiState.userUiState) {
         if (processLogIn) {
             if (uiState.userUiState != null) {
