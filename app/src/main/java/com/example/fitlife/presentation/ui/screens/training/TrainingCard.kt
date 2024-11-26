@@ -37,7 +37,7 @@ fun TrainingCard(title: String, gifUrl: String, onClick: (String) -> Unit ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
