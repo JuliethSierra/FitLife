@@ -1,5 +1,6 @@
 package com.example.fitlife.presentation.ui.screens.profilescreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -22,27 +23,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.fitlife.data.repository.AuthRepositoryImpl
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
+import com.example.fitlife.ui.theme.lightGrayBlue
+import com.example.fitlife.ui.theme.purple
+import com.example.fitlife.ui.theme.yellowAccent
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun ProfileScreen(
     navController: NavController,
     logInViewModel: LogInScreenViewModel
 ) {
-    // Definición de colores
-    val purple = Color(0xFFAC44F2)
-    val blue = Color(0xFF3876F2)
-    val lightGrayBlue = Color(0xFF88A5BF)
-    val yellowAccent = Color(0xFFF2A007)
-    val white = Color(0xFFFFFFFF)
+
+    val user = AuthRepositoryImpl.currentUser
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(white)
+            .background(Color.White)
     ) {
         // Header con botón de editar
         Box(
@@ -94,7 +95,7 @@ fun ProfileScreen(
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Andrea Sierra",
+                text = "${user?.name + " " + user?.lastName}",
                 color = Color.Black,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
@@ -111,8 +112,8 @@ fun ProfileScreen(
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            UserDataCard("60 kg", purple)
-            UserDataCard("160 cm", purple)
+            UserDataCard("${user?.weight} kg", purple)
+            UserDataCard("${user?.height} cm", purple)
             UserDataCard("29%", purple)
         }
 
@@ -122,10 +123,10 @@ fun ProfileScreen(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            AdditionalInfoItem(Icons.Default.Email, "Correo", "andrea@example.com", yellowAccent)
-            AdditionalInfoItem(Icons.Default.CalendarToday, "Fecha de nacimiento", "10/01/1995", yellowAccent)
-            AdditionalInfoItem(Icons.Default.Person, "Sexo", "Femenino", yellowAccent)
-            AdditionalInfoItem(Icons.Default.Phone, "Telefono", "123456789", yellowAccent)
+            AdditionalInfoItem(Icons.Default.Email, "Correo", "${user?.email}", yellowAccent)
+            AdditionalInfoItem(Icons.Default.CalendarToday, "Fecha de nacimiento", "${user?.birthDate}", yellowAccent)
+            AdditionalInfoItem(Icons.Default.Person, "Sexo", "${user?.gender}", yellowAccent)
+            AdditionalInfoItem(Icons.Default.Phone, "Telefono", "${user?.numberPhone}", yellowAccent)
 
         }
 

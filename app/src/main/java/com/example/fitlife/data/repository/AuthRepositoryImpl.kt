@@ -2,6 +2,7 @@ package com.example.fitlife.data.repository
 
 import android.util.Log
 import com.example.fitlife.data.local.dao.UserDao
+import com.example.fitlife.data.local.mappers.toUser
 import com.example.fitlife.data.local.mappers.toUserEntity
 import com.example.fitlife.data.remote.firebase.services.AuthenticationService
 import com.example.fitlife.data.remote.firebase.services.UserService
@@ -15,6 +16,9 @@ class AuthRepositoryImpl @Inject constructor(
     private val userDao: UserDao
 ) : AuthRepository {
 
+    companion object {
+        var currentUser: User? = null
+    }
 
     override suspend fun login(email: String, password: String): User? {
         val uid = authenticationService.login(email, password)
@@ -23,6 +27,7 @@ class AuthRepositoryImpl @Inject constructor(
             if (user != null) {
                 try {
                     userDao.insertUser(user.toUserEntity())
+                    currentUser = user // Asignar al companion object
                     user
                 } catch (e: Exception) {
                     null
@@ -43,6 +48,7 @@ class AuthRepositoryImpl @Inject constructor(
         val response = userDao.getAllUsers()
 
         return if (response.isNotEmpty()) {
+            currentUser = response[0].toUser()
             Log.d("AndroidRuntime", "Is logged? true")
             true
         } else {
