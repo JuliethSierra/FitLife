@@ -22,8 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ChainStyle
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.fitlife.R
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
@@ -62,34 +60,21 @@ fun SplashScreen(
 
 @Composable
 fun Splash() {
-    ConstraintLayout (
-        modifier = Modifier.fillMaxSize()
-    ){
-        val (logo, title) = createRefs()
-
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Image(
             painter = painterResource(id = R.drawable.splash_icon),
-            contentDescription = "Logo",
-            modifier = Modifier
-                .size(150.dp)
-                .constrainAs(logo) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(title.top, margin = 100.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+            contentDescription = "Logo Inicial",
+            Modifier.size(150.dp, 150.dp)
         )
         Text(
-            text = "",
+            text = "FitLife",
             fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.constrainAs(title) {
-                top.linkTo(logo.bottom, margin = 100.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            fontWeight = FontWeight.Bold
         )
-        createVerticalChain(logo, title, chainStyle = ChainStyle.Packed)
     }
 }
 
