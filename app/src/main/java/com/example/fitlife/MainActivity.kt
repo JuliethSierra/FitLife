@@ -96,6 +96,7 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(
                                 logInViewModel = logInViewModel,
                                 navController = navController
+                                
                             )
                         }
 
