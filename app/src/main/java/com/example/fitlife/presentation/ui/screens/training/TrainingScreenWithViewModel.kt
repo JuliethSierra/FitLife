@@ -5,8 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitlife.presentation.viewmodel.ExerciseViewModel
 
 @Composable
-fun TrainingScreenWithViewModel() {
+fun TrainingScreenWithViewModel(onExerciseSelected: (String) -> Unit) {
     val viewModel: ExerciseViewModel = hiltViewModel()
-
-    TrainingScreen(viewModel)
+    TrainingScreen(viewModel, onExerciseSelected)
 }

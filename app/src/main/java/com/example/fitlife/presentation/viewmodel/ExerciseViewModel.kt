@@ -21,6 +21,9 @@ class ExerciseViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
+    private val _exerciseDetail = MutableLiveData<Exercise?>()
+    val exerciseDetail: LiveData<Exercise?> get() = _exerciseDetail
+
     init {
         fetchAllExercises()
     }
@@ -38,13 +41,17 @@ class ExerciseViewModel @Inject constructor(
         }
     }
 
-    fun fetchExercisesByName(name: String) {
+    // Cargar un ejercicio específico por nombre
+    fun fetchExerciseByName(name: String) {
         _isLoading.value = true
         viewModelScope.launch {
             try {
-                _exercises.value = getExerciseByNameUseCase(name)
+                val exercise = getExerciseByNameUseCase(name).firstOrNull() // Ajusta según sea necesario
+                _exerciseDetail.value = exercise
+                Log.d("ExerciseViewModel", "Detalle cargado: $exercise")
             } catch (e: Exception) {
-                _exercises.value = emptyList()
+                _exerciseDetail.value = null
+                Log.e("ExerciseViewModel", "Error al cargar detalle del ejercicio", e)
             } finally {
                 _isLoading.value = false
             }

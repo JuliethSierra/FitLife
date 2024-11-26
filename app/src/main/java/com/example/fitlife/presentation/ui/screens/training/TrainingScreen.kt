@@ -26,7 +26,7 @@ import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 import com.example.fitlife.presentation.viewmodel.ExerciseViewModel
 
 @Composable
-fun TrainingScreen(viewModel: ExerciseViewModel) {
+fun TrainingScreen(viewModel: ExerciseViewModel,  onExerciseSelected: (String) -> Unit) {
     val exercises = viewModel.exercises.observeAsState(emptyList())
     Log.d("TrainingScreen", "Ejercicios en la UI: ${exercises.value.size}")
 
@@ -45,8 +45,6 @@ fun TrainingScreen(viewModel: ExerciseViewModel) {
                     .padding(16.dp)
                     .align(Alignment.CenterHorizontally)
             )
-
-            // Estado de carga
             if (exercises.value.isEmpty()) {
                 Text(
                     text = "Cargando ejercicios...",
@@ -56,7 +54,6 @@ fun TrainingScreen(viewModel: ExerciseViewModel) {
                     style = MaterialTheme.typography.body1
                 )
             } else {
-                // Lista de ejercicios
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -65,7 +62,8 @@ fun TrainingScreen(viewModel: ExerciseViewModel) {
                     items(exercises.value) { exercise ->
                         TrainingCard(
                             title = exercise.name,
-                            gifUrl = exercise.gifUrl
+                            gifUrl = exercise.gifUrl,
+                            onClick = { onExerciseSelected(exercise.name) }
                         )
                     }
                 }

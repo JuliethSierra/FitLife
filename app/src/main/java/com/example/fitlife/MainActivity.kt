@@ -11,10 +11,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.fitlife.presentation.ui.screens.advances.AdvancesScreen
 import com.example.fitlife.presentation.ui.screens.introduction.SplashScreen
 import com.example.fitlife.presentation.viewmodel.UserViewModel
 import com.example.fitlife.presentation.ui.screens.introduction.WelcomeScreen
@@ -24,6 +27,7 @@ import com.example.fitlife.presentation.ui.screens.profilescreen.ProfileScreen
 import com.example.fitlife.presentation.ui.screens.initscreen.InitScreen
 import com.example.fitlife.presentation.ui.screens.training.TrainingScreenWithViewModel
 import com.example.fitlife.presentation.ui.screens.signup.SignInScreen
+import com.example.fitlife.presentation.ui.screens.training.ExerciseDetailScreen
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import com.example.fitlife.presentation.viewmodel.SignUpViewModel
 import com.example.fitlife.ui.theme.FitLifeTheme
@@ -50,7 +54,9 @@ class MainActivity : ComponentActivity() {
                         if (currentRoute in listOf(
                                 "TrainingScreen",
                                 "ProfileScreen",
-                                "InitScreen"
+                                "AdvancesScreen",
+                                "InitScreen",
+                                "ExerciseDetail/{exerciseName}"
                             )
                         ) {
                             BottomNavigationBar(navController)
@@ -92,9 +98,13 @@ class MainActivity : ComponentActivity() {
 
                         // Pantallas con BottomNavigationBar
                         composable("TrainingScreen") {
-                            TrainingScreenWithViewModel()
+                            TrainingScreenWithViewModel { exerciseName ->
+                                navController.navigate("ExerciseDetail/$exerciseName")
+                            }
                         }
-
+                        composable("AdvancesScreen") {
+                            AdvancesScreen()
+                        }
                         composable("ProfileScreen") {
                             ProfileScreen(
                                 logInViewModel = logInViewModel,
@@ -104,6 +114,13 @@ class MainActivity : ComponentActivity() {
 
                         composable("InitScreen") {
                             InitScreen(navController = navController)
+                        }
+
+                        composable("ExerciseDetail/{exerciseName}", arguments = listOf(navArgument("exerciseName") { type = NavType.StringType })) { backStackEntry ->
+                            val exerciseName = backStackEntry.arguments?.getString("exerciseName")
+                            if (exerciseName != null) {
+                                ExerciseDetailScreen(exerciseName = exerciseName)
+                            }
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 package com.example.fitlife.presentation.ui.screens.training
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,13 +25,14 @@ import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 
 
 @Composable
-fun TrainingCard(title: String, gifUrl: String) {
+fun TrainingCard(title: String, gifUrl: String, onClick: (String) -> Unit ) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
+            .clickable { onClick(title) },
     ) {
         Row(
             modifier = Modifier
@@ -42,24 +44,17 @@ fun TrainingCard(title: String, gifUrl: String) {
                 model = gifUrl,
                 contentDescription = "Exercise Image",
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(58.dp)
                     .background(Color.Gray, shape = CircleShape)
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Título del ejercicio
             Text(
                 text = title,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.h5,
                 modifier = Modifier.weight(1f)
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TrainingCardPreview(){
-    TrainingCard("Prueba", "https://v2.exercisedb.io/image/l2c1NYwRCTRoBg")
 }

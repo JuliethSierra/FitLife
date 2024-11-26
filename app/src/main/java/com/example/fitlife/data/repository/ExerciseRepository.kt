@@ -8,6 +8,7 @@ import javax.inject.Inject
 class ExerciseRepositoryImpl @Inject constructor (
     private val exerciseRemoteDataSource: ExerciseApiService
 ) : ExerciseRepository {
+
     override suspend fun getExerciseByName(name: String): List<Exercise> {
         return exerciseRemoteDataSource.getExerciseByName(name)
     }
