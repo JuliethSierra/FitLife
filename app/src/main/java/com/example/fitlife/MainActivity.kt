@@ -1,9 +1,11 @@
 package com.example.fitlife
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
     private val logInViewModel: LogInScreenViewModel by viewModels()
     private val signUpViewModel: SignUpViewModel by viewModels()
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getUsers()
