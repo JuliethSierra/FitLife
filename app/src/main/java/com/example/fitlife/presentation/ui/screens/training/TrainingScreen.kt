@@ -3,6 +3,7 @@ package com.example.fitlife.presentation.ui.screens.training
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,10 +49,15 @@ fun TrainingScreen(viewModel: ExerciseViewModel,  onExerciseSelected: (String) -
                     .align(Alignment.CenterHorizontally)
             )
             if (exercises.value.isEmpty()) {
-                CircularProgressIndicator(
-                    modifier = Modifier.width(64.dp),
-                    color = MaterialTheme.colors.secondary,
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ){
+                    CircularProgressIndicator(
+                        modifier = Modifier.width(64.dp),
+                        color = MaterialTheme.colors.primary,
+                    )
+                }
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),

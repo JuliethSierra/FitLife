@@ -4,6 +4,7 @@ package com.example.fitlife.presentation.ui.screens.menu
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
@@ -41,8 +42,8 @@ fun BottomNavigationBar(navController: NavController) {
         ),
     )
     BottomNavigation(
-        backgroundColor = Color(0xF0B34AF1), // Tu color personalizado
-        contentColor = Color.White // Color de contenido, como texto e íconos
+        backgroundColor = MaterialTheme.colors.primary,
+        contentColor = Color.White
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
