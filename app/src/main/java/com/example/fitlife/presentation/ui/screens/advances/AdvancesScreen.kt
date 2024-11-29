@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -26,27 +27,26 @@ import androidx.compose.ui.unit.dp
 fun AdvancesScreen() {
     val tabs = listOf("Mis avances", "Comunidad")
     var selectedTabIndex by remember { mutableStateOf(0) }
-    Scaffold {
+
+    Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
                 .background(Color.White)
         ) {
             Text(
                 text = "Avances",
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(top = 16.dp, bottom = 8.dp)
                     .align(Alignment.CenterHorizontally)
             )
             TabRow(
                 selectedTabIndex = selectedTabIndex,
                 containerColor = Color.White,
-                indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
-                        Modifier.padding(horizontal = 24.dp),
-                    )
-                }
+                indicator = { /* Sin indicador visual */ },
+                divider = {} // Sin línea divisoria
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
@@ -62,7 +62,7 @@ fun AdvancesScreen() {
                     )
                 }
             }
-
+            
             when (selectedTabIndex) {
                 0 -> MyProgressView() // Vista "Mis avances"
                 1 -> CommunityView()  // Vista "Comunidad"
