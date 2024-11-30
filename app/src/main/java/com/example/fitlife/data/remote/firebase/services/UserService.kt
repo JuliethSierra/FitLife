@@ -6,6 +6,7 @@ import com.example.fitlife.data.remote.firebase.FirebaseClient
 import com.example.fitlife.data.remote.firebase.mappers.toUser
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.presentation.ui.screens.utils.Constants
+import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -79,6 +80,35 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
         } catch (e: Exception) {
             Log.e(Constants.TAG, "Error getting user by UID: ${e.message}", e)
             null
+        }
+    }
+    suspend fun addCompletedExercise(uid: String, exerciseName: String): Boolean {
+        return try {
+            val userDoc = firebaseClient.firestore
+                .collection(Constants.COLLECTION_USERS)
+                .document(uid)
+
+            userDoc.update("completedExercises", FieldValue.arrayUnion(exerciseName))
+                .await()
+            true
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "Error adding completed exercise: ${e.message}", e)
+            false
+        }
+    }
+
+    suspend fun getCompletedExercises(uid: String): List<String> {
+        return try {
+            val userRef = firebaseClient.firestore
+                .collection(Constants.COLLECTION_USERS)
+                .document(uid)
+
+            val snapshot = userRef.get().await()
+            val completedExercises = snapshot.get("completedExercises") as? List<String> ?: emptyList()
+            completedExercises
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "Error getting completed exercises: ${e.message}", e)
+            emptyList()
         }
     }
 
