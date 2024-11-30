@@ -21,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.fitlife.presentation.viewmodel.UserViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AdvancesScreen() {
+fun AdvancesScreen(viewModel: UserViewModel = hiltViewModel()) {
     val tabs = listOf("Mis avances", "Comunidad")
     var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -62,9 +64,10 @@ fun AdvancesScreen() {
                     )
                 }
             }
-            
+
+            // Mostrar la vista correspondiente según la pestaña seleccionada
             when (selectedTabIndex) {
-                0 -> MyProgressView() // Vista "Mis avances"
+                0 -> MyProgressView(viewModel = viewModel) // Pasando el ViewModel a MyProgressView
                 1 -> CommunityView()  // Vista "Comunidad"
             }
         }
