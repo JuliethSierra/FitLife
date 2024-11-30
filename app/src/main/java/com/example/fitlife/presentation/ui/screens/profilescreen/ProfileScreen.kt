@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.fitlife.data.repository.AuthRepositoryImpl
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
@@ -112,9 +113,9 @@ fun ProfileScreen(
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            UserDataCard("${user?.weight} kg", purple)
-            UserDataCard("${user?.height} cm", purple)
-            UserDataCard("29%", purple)
+            UserDataCard("${user?.weight} kg", Color.Black, "Peso", yellowAccent)
+            UserDataCard("${user?.height} cm", Color.Black, "Estatura", yellowAccent)
+            UserDataCard("20.1", Color.Black, "IMC", yellowAccent)
         }
 
         // Información adicional
@@ -152,20 +153,41 @@ fun ProfileScreen(
 }
 
 @Composable
-fun UserDataCard(value: String, textColor: Color) {
-    Box(
+fun UserDataCard(value: String, valueColor: Color, key: String, keyColor: Color) {
+    ConstraintLayout(
         modifier = Modifier
             .clip(RoundedCornerShape(2.dp))
             .background(Color.White)
-            .padding(2.dp)
+            .padding(16.dp)
     ) {
+        // Crear las referencias para los componentes dentro del ConstraintLayout
+        val (valueText, labelText) = createRefs()
+
+        // Definir las restricciones para los elementos dentro del ConstraintLayout
         Text(
             text = value,
-            color = Color.Black,
-            style = MaterialTheme.typography.bodyLarge
+            color = valueColor,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.constrainAs(valueText) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        )
+
+        Text(
+            text = key,
+            color = keyColor, // Opcionalmente puedes modificar el color
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.constrainAs(labelText) {
+                top.linkTo(valueText.bottom, margin = 8.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
     }
 }
+
 
 @Composable
 fun AdditionalInfoItem(icon: ImageVector, label: String, value: String, iconColor: Color) {
@@ -179,11 +201,11 @@ fun AdditionalInfoItem(icon: ImageVector, label: String, value: String, iconColo
             imageVector = icon,
             contentDescription = label,
             tint = iconColor,
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier.padding(end = 16.dp)
         )
         Text(
             text = "$value",
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.bodyLarge,
             color = Color.Black
         )
     }
