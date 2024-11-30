@@ -2,6 +2,7 @@ package com.example.fitlife.presentation.ui.screens.training
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,15 +12,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
-
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -31,37 +35,50 @@ import coil.compose.AsyncImage
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import com.example.fitlife.presentation.viewmodel.ExerciseViewModel
+import com.example.fitlife.presentation.viewmodel.UserViewModel
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun ExerciseDetailScreen(
     exerciseName: String,
-    viewModel: ExerciseViewModel = hiltViewModel()
+    viewModel: ExerciseViewModel = hiltViewModel(),
+    viewModelUserViewModel: UserViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit
 ) {
     val exerciseDetail by viewModel.exerciseDetail.observeAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(exerciseName) {
         viewModel.fetchExerciseByName(exerciseName)
     }
 
     if (exerciseDetail != null) {
-        Scaffold {
+        Scaffold(
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.White)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 androidx.compose.material.Text(
-                    text = "${exerciseDetail!!.name}",
+                    text = exerciseDetail!!.name,
                     style = MaterialTheme.typography.h5,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.CenterHorizontally)
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("${exerciseDetail!!.gifUrl}")
+                        .data(exerciseDetail!!.gifUrl)
                         .decoderFactory(ImageDecoderDecoder.Factory())
                         .build(),
                     contentDescription = "Exercise GIF",
@@ -72,22 +89,38 @@ fun ExerciseDetailScreen(
                 Text(
                     text = "Instructions: ${exerciseDetail!!.instructions.joinToString("\n")}",
                     style = MaterialTheme.typography.body1,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    modifier = Modifier.padding(vertical = 8.dp)
                 )
                 Text(
                     text = "Muscles: ${exerciseDetail!!.secondaryMuscles.joinToString("\n")}",
                     style = MaterialTheme.typography.body1,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
+                Button(
+                    onClick = {
+                        viewModelUserViewModel.addCompletedExercise(exerciseName)
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Ejercicio finalizado con éxito")
+                            onNavigateBack()
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Finalizar Ejercicio")
+                }
             }
         }
     } else {
-        Text(
-            text = "Loading...",
-            style = MaterialTheme.typography.h6,
+        Box(
             modifier = Modifier.fillMaxSize(),
-            color = Color.Gray
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.width(64.dp),
+                color = MaterialTheme.colors.primary,
+            )
+        }
     }
 }
-
