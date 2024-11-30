@@ -21,12 +21,6 @@ class UserViewModel @Inject constructor(
 
     fun loadUsers() {
         viewModelScope.launch {
-            /*    val users: List<User> = repository.getAllUsers()
-                Log.d("AndroidRuntime", "Users: $users")
-                _uiState.value = _uiState.value.copy(
-                    usersList = users,
-                    isLoading = false
-                )*/
         }
     }
 }
