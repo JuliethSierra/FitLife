@@ -87,8 +87,6 @@ fun SignInScreen(
 
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequesters = List(10) { FocusRequester() }
-    val focusManager = LocalFocusManager.current
 
     Surface(modifier = Modifier.fillMaxSize(), color = white) {
         LazyColumn(
