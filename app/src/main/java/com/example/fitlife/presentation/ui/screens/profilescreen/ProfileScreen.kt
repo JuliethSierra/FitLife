@@ -2,7 +2,6 @@ package com.example.fitlife.presentation.ui.screens.profilescreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.fitlife.data.repository.AuthRepositoryImpl
+import com.example.fitlife.presentation.ui.screens.utils.Util
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import com.example.fitlife.ui.theme.lightGrayBlue
 import com.example.fitlife.ui.theme.purple
@@ -115,7 +115,7 @@ fun ProfileScreen(
         ) {
             UserDataCard("${user?.weight} kg", Color.Black, "Peso", yellowAccent)
             UserDataCard("${user?.height} cm", Color.Black, "Estatura", yellowAccent)
-            UserDataCard("20.1", Color.Black, "IMC", yellowAccent)
+            UserDataCard("${Util.calculateIMC(user?.weight, user?.height)}", Color.Black, "IMC", yellowAccent)
         }
 
         // Información adicional
@@ -124,8 +124,12 @@ fun ProfileScreen(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
+
             AdditionalInfoItem(Icons.Default.Email, "Correo", "${user?.email}", yellowAccent)
             AdditionalInfoItem(Icons.Default.CalendarToday, "Fecha de nacimiento", "${user?.birthDate}", yellowAccent)
+            if (user != null) {
+                AdditionalInfoItem(Icons.Default.CalendarToday, "}edad", "${Util.calculateAge(user.birthDate)}", yellowAccent)
+            }
             AdditionalInfoItem(Icons.Default.Person, "Sexo", "${user?.gender}", yellowAccent)
             AdditionalInfoItem(Icons.Default.Phone, "Telefono", "${user?.numberPhone}", yellowAccent)
 
