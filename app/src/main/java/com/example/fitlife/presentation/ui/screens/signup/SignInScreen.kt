@@ -6,8 +6,11 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.material.MaterialTheme
@@ -35,8 +38,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.navigation.NavController
 import com.example.fitlife.R
 import com.example.fitlife.presentation.ui.components.buttons.SubmitButton
@@ -50,6 +58,19 @@ fun SignInScreen(
     navController: NavController,
     signUpViewModel: SignUpViewModel
 ) {
+
+    val focusRequesterName = remember { FocusRequester() }
+    val focusRequesterLastName = remember { FocusRequester() }
+    val focusRequesterEmail = remember { FocusRequester() }
+    val focusRequesterHeight = remember { FocusRequester() }
+    val focusRequesterBirthDate = remember { FocusRequester() }
+    val focusRequesterGender = remember { FocusRequester() }
+    val focusRequesterWeight = remember { FocusRequester() }
+    val focusRequesterPhone = remember { FocusRequester() }
+    val focusRequesterPassword = remember { FocusRequester() }
+    val focusRequesterConfirmPassword = remember { FocusRequester() }
+
+
     val name = remember { mutableStateOf("Andrea") }
     val lastName = remember { mutableStateOf("Sierra") }
     val email = remember { mutableStateOf("a@s.com") }
@@ -65,24 +86,97 @@ fun SignInScreen(
     var processSignUp by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Surface(modifier = Modifier.fillMaxSize(), color = white) {
         LazyColumn(
             modifier = Modifier
-                .padding(16.dp),
+                .padding(16.dp)
+                .imePadding(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item { InputField(valueState = name, labelId = "Nombre") }
-            item { InputField(valueState = lastName, labelId = "Apellido") }
-            item { EmailInput(emailState = email) }
-            item { InputField(valueState = height, labelId = "Altura (cm)", keyboardType = KeyboardType.Number) }
-            item { InputField(valueState = weight, labelId = "Peso (kg)", keyboardType = KeyboardType.Number) }
-            item { InputField(valueState = birthDate, labelId = "Fecha de Nacimiento (yyyy/MM/dd)") }
-            item { GenderDropdownMenu(selectedGender = gender, labelId = "Género") }
-
-            item { InputField(valueState = numberPhone, labelId = "Número de Teléfono", keyboardType = KeyboardType.Phone) }
-            item { PasswordInput(passwordState = password, labelId = "Contraseña") }
-            item { PasswordInput(passwordState = confirmPassword, labelId = "Confirmar Contraseña") }
+            item {
+                InputField(
+                    valueState = name,
+                    labelId = "Nombre",
+                    focusRequester = focusRequesterName,
+                    onNext = { focusRequesterLastName.requestFocus() }
+                )
+            }
+            item {
+                InputField(
+                    valueState = lastName,
+                    labelId = "Apellido",
+                    focusRequester = focusRequesterLastName,
+                    onNext = { focusRequesterEmail.requestFocus() }
+                )
+            }
+            item {
+                EmailInput(
+                    emailState = email,
+                    labelId = "Correo Electrónico",
+                    focusRequester = focusRequesterEmail,
+                    onNext = { focusRequesterHeight.requestFocus() }
+                )
+            }
+            item {
+                InputField(
+                    valueState = height,
+                    labelId = "Altura (cm)",
+                    keyboardType = KeyboardType.Number,
+                    focusRequester = focusRequesterHeight,
+                    onNext = { focusRequesterWeight.requestFocus() }
+                )
+            }
+            item {
+                InputField(
+                    valueState = weight,
+                    labelId = "Peso (kg)",
+                    keyboardType = KeyboardType.Number,
+                    focusRequester = focusRequesterWeight,
+                    onNext = { focusRequesterBirthDate.requestFocus() }
+                )
+            }
+            item {
+                InputField(
+                    valueState = birthDate,
+                    labelId = "Fecha de Nacimiento (yyyy/MM/dd)",
+                    focusRequester = focusRequesterBirthDate,
+                    onNext = { focusRequesterGender.requestFocus() }
+                )
+            }
+            item {
+                GenderDropdownMenu(
+                    selectedGender = gender,
+                    labelId = "Género",
+                    focusRequester = focusRequesterGender,
+                    onNext = { focusRequesterPhone.requestFocus() }
+                )
+            }
+            item {
+                InputField(
+                    valueState = numberPhone,
+                    labelId = "Número de Teléfono",
+                    keyboardType = KeyboardType.Phone,
+                    focusRequester = focusRequesterPhone,
+                    onNext = { focusRequesterPassword.requestFocus() }
+                )
+            }
+            item {
+                PasswordInput(
+                    passwordState = password,
+                    labelId = "Contraseña",
+                    focusRequester = focusRequesterPassword,
+                    onNext = { focusRequesterConfirmPassword.requestFocus() }
+                )
+            }
+            item {
+                PasswordInput(
+                    passwordState = confirmPassword,
+                    labelId = "Confirmar Contraseña",
+                    focusRequester = focusRequesterConfirmPassword
+                )
+            }
 
             item {
                 SubmitButton(
@@ -99,6 +193,7 @@ fun SignInScreen(
                             confirmPassword.value.isNotBlank() &&
                             password.value == confirmPassword.value
                 ) {
+                    keyboardController?.hide()
                     val user = User(
                         name = name.value,
                         lastName = lastName.value,
@@ -137,23 +232,38 @@ fun SignInScreen(
 fun InputField(
     valueState: MutableState<String>,
     labelId: String,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    modifier: Modifier = Modifier,
+    focusRequester: FocusRequester = FocusRequester(),
+    onNext: (() -> Unit)? = null
 ) {
     OutlinedTextField(
         value = valueState.value,
         onValueChange = { valueState.value = it },
         label = { Text(text = labelId, color = purple) },
         singleLine = true,
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = keyboardType,
+            imeAction = if (onNext != null) ImeAction.Next else ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = { onNext?.invoke() },
+            onDone = { onNext?.invoke() } // If it's the last field, handle "Done"
+        ),
         textStyle = androidx.compose.material3.MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
     )
 }
+
 
 @Composable
 fun PasswordInput(
     passwordState: MutableState<String>,
-    labelId: String
+    labelId: String,
+    focusRequester: FocusRequester = FocusRequester(),
+    onNext: (() -> Unit)? = null
 ) {
     var passwordVisibility by remember { mutableStateOf(false) }
 
@@ -170,73 +280,33 @@ fun PasswordInput(
                 Icon(imageVector = image, contentDescription = null)
             }
         },
-        modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
-                textStyle = MaterialTheme.typography.h5.copy(color = Color.Black)
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Password,
+            imeAction = if (onNext != null) ImeAction.Next else ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = { onNext?.invoke() },
+            onDone = { onNext?.invoke() }
+        ),
+        textStyle = MaterialTheme.typography.h5.copy(color = Color.Black)
     )
 }
 
 @Composable
 fun EmailInput(
     emailState: MutableState<String>,
-    labelId: String = "Email"
+    labelId: String = "Email",
+    focusRequester: FocusRequester = FocusRequester(),
+    onNext: (() -> Unit)? = null
 ) {
     InputField(
         valueState = emailState,
         labelId = labelId,
-        keyboardType = KeyboardType.Email
+        keyboardType = KeyboardType.Email,
+        focusRequester = focusRequester,
+        onNext = onNext
     )
-}
-
-@Composable
-fun InputField(
-    valueState: MutableState<String>,
-    labelId: String,
-    isSingleLine: Boolean = true,
-    keyboardType: KeyboardType
-) {
-    OutlinedTextField(
-        value = valueState.value,
-        onValueChange = { valueState.value = it },
-        label = { Text(text = labelId) },
-        singleLine = isSingleLine,
-        modifier = Modifier
-            .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-            .fillMaxWidth(),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
-    )
-}
-
-@Composable
-fun PasswordInput(
-    passwordState: MutableState<String>,
-    labelId: String,
-    passwordVisible: MutableState<Boolean>
-) {
-    val visualTransformation =
-        if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
-    OutlinedTextField(
-        value = passwordState.value,
-        onValueChange = { passwordState.value = it },
-        label = { Text(text = labelId) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        modifier = Modifier
-            .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-            .fillMaxWidth(),
-        visualTransformation = visualTransformation,
-        trailingIcon = {
-            if (passwordState.value.isNotBlank()) {
-                PasswordVisibleIcon(passwordVisible)
-            }
-        }
-    )
-}
-
-@Composable
-fun PasswordVisibleIcon(passwordVisible: MutableState<Boolean>) {
-    val image = if (passwordVisible.value) Icons.Default.VisibilityOff else Icons.Default.Visibility
-    IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
-        Icon(imageVector = image, contentDescription = null)
-    }
 }
