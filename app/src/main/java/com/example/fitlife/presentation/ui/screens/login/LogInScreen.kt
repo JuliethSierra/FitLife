@@ -25,13 +25,21 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.fitlife.R
 import com.example.fitlife.presentation.ui.screens.utils.Constants
 import com.example.fitlife.ui.theme.purple
 import com.example.fitlife.ui.theme.white
@@ -56,11 +64,21 @@ fun LoginScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            val (title, emailField, passwordField, loginButton) = createRefs()
+            val (image, title, emailField, passwordField, loginButton) = createRefs()
 
             // Centrar el grupo de elementos verticalmente
             val guideline = createGuidelineFromTop(0.3f)
-
+            Image(
+                painter = painterResource(id = R.drawable.splash),
+                contentDescription = "Imagen de introducción",
+                modifier = Modifier
+                    .size(100.dp)
+                    .constrainAs(image) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            )
             Text(
                 text = "Iniciar Sesión",
                 style = MaterialTheme.typography.headlineMedium,
@@ -75,10 +93,16 @@ fun LoginScreen(
             OutlinedTextField(
                 value = emailState.value,
                 onValueChange = { emailState.value = it },
-                label = { Text("Correo Electrónico", color = purple)},
+                label = { Text("Correo Electrónico", color = purple) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default,
                 textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Icono de usuario"
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(emailField) {
