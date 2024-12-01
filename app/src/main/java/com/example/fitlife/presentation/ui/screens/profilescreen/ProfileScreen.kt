@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -85,7 +87,8 @@ fun ProfileScreen(
                 modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
-                    .background(lightGrayBlue),
+                    .background(Brush.radialGradient(listOf(yellowAccent, purple)))
+                    .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -113,9 +116,36 @@ fun ProfileScreen(
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            UserDataCard("${user?.weight} kg", Color.Black, "Peso", yellowAccent)
-            UserDataCard("${user?.height} cm", Color.Black, "Estatura", yellowAccent)
-            UserDataCard("${Util.calculateIMC(user?.weight, user?.height)}", Color.Black, "IMC", yellowAccent)
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                backgroundColor = Color.White,
+                elevation = 8.dp,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(100.dp)
+            ) {
+                UserDataCard("${user?.weight} kg", Color.Black, "Peso", yellowAccent)
+            }
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                backgroundColor = Color.White,
+                elevation = 8.dp,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(100.dp)
+            ) {
+                UserDataCard("${user?.height} cm", Color.Black, "Estatura", yellowAccent)
+            }
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                backgroundColor = Color.White,
+                elevation = 8.dp,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(100.dp)
+            ) {
+                UserDataCard("${Util.calculateIMC(user?.weight, user?.height)}", Color.Black, "IMC", yellowAccent)
+            }
         }
 
         // Información adicional
