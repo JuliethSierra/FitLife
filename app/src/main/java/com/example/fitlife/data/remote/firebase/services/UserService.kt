@@ -82,20 +82,20 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
             null
         }
     }
+
     suspend fun addCompletedExercise(uid: String, exerciseName: String): Boolean {
         return try {
-            val userDoc = firebaseClient.firestore
-                .collection(Constants.COLLECTION_USERS)
-                .document(uid)
-
-            userDoc.update("completedExercises", FieldValue.arrayUnion(exerciseName))
-                .await()
+            Log.d(Constants.TAG, "Updating Firestore with exercise: $exerciseName for UID: $uid")
+            val userDoc = firebaseClient.firestore.collection(Constants.COLLECTION_USERS).document(uid)
+            userDoc.update("completedExercises", FieldValue.arrayUnion(exerciseName)).await()
+            Log.d(Constants.TAG, "Firestore update successful")
             true
         } catch (e: Exception) {
             Log.e(Constants.TAG, "Error adding completed exercise: ${e.message}", e)
             false
         }
     }
+
 
     suspend fun getCompletedExercises(uid: String): List<String> {
         return try {

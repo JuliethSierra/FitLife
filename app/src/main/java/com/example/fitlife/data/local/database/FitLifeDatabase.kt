@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.example.fitlife.data.local.dao.UserDao
 import com.example.fitlife.data.local.entity.UserEntity
 
-@Database(entities = [UserEntity::class], version = 2, exportSchema = false)
+@Database(entities = [UserEntity::class], version = 3, exportSchema = false)
 abstract class FitLifeDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }

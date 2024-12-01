@@ -17,7 +17,8 @@ fun User.toUserEntity(): UserEntity {
         profilePictureUrl = profilePictureUrl,
         numberPhone = numberPhone,
         password = password,
-        uid = uid
+        uid = uid,
+        completedExercises = completedExercises.joinToString(",")
     )
 }
 
@@ -33,6 +34,7 @@ fun UserEntity.toUser(): User {
         profilePictureUrl = profilePictureUrl,
         numberPhone = numberPhone,
         password = password,
-        uid = uid
+        uid = uid,
+        completedExercises = completedExercises.split(",").filter { it.isNotBlank() }
     )
 }

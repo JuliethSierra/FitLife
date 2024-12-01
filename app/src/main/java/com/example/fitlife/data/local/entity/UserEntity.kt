@@ -15,5 +15,6 @@ data class UserEntity(
     val weight: Float,
     val profilePictureUrl: String? = null,
     val numberPhone: String,
-    val password: String
+    val password: String,
+    val completedExercises: String
 )

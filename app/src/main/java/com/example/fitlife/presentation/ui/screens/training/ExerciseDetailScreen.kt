@@ -102,6 +102,7 @@ fun ExerciseDetailScreen(
                 Button(
                     onClick = {
                         Log.d("hola", "Button clicked")
+                        println("Error al añadir ejercicios: ${viewModelUserViewModel}")
                         viewModelUserViewModel.addCompletedExercise(exerciseName)
                         scope.launch {
                             snackbarHostState.showSnackbar("Ejercicio finalizado con éxito")

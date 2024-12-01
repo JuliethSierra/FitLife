@@ -1,5 +1,6 @@
 package com.example.fitlife.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitlife.data.remote.firebase.services.UserService
@@ -41,6 +42,7 @@ class UserViewModel @Inject constructor(
             }
         }
     }
+
 
     fun loadCompletedExercises() {
         val uid = _uiState.value.user?.uid ?: return
