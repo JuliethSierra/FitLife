@@ -33,16 +33,18 @@ class UserViewModel @Inject constructor(
         val uid = _uiState.value.user?.uid ?: return
         viewModelScope.launch {
             val success = userService.addCompletedExercise(uid, exerciseName)
+
             if (success) {
                 _uiState.update { state ->
                     state.copy(
                         completedExercises = state.completedExercises + exerciseName
                     )
                 }
+            } else {
+                Log.e("UserViewModel", "Error al agregar ejercicio completado")
             }
         }
     }
-
 
     fun loadCompletedExercises() {
         val uid = _uiState.value.user?.uid ?: return

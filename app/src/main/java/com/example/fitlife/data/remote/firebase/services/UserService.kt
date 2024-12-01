@@ -84,6 +84,7 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
     }
 
     suspend fun addCompletedExercise(uid: String, exerciseName: String): Boolean {
+        Log.d("Firestore", "UID: $uid, Exercise: $exerciseName")
         return try {
             Log.d(Constants.TAG, "Updating Firestore with exercise: $exerciseName for UID: $uid")
             val userDoc = firebaseClient.firestore.collection(Constants.COLLECTION_USERS).document(uid)
@@ -95,7 +96,6 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
             false
         }
     }
-
 
     suspend fun getCompletedExercises(uid: String): List<String> {
         return try {

@@ -102,11 +102,14 @@ fun ExerciseDetailScreen(
                 Button(
                     onClick = {
                         Log.d("hola", "Button clicked")
-                        println("Error al añadir ejercicios: ${viewModelUserViewModel}")
+
+                        // Llamar a addCompletedExercise de forma asincrónica y esperar que termine
                         viewModelUserViewModel.addCompletedExercise(exerciseName)
+
+                        // Una vez la operación asincrónica ha finalizado, puedes mostrar el Snackbar
                         scope.launch {
                             snackbarHostState.showSnackbar("Ejercicio finalizado con éxito")
-                            onNavigateBack()
+                            onNavigateBack()  // Navegar después de completar la operación
                         }
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
