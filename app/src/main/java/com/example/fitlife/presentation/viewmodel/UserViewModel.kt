@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitlife.data.remote.firebase.services.UserService
 import com.example.fitlife.data.repository.AuthRepositoryImpl
+import com.example.fitlife.domain.model.usecases.AddCompleteExerciseUseCase
+import com.example.fitlife.domain.model.usecases.GetAllCompleteExerciseUseCase
 import com.example.fitlife.presentation.ui.screens.states.UserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UserViewModel @Inject constructor(
     private val repository: AuthRepositoryImpl,
-    private val userService: UserService
+    private val addCompleteExerciseUseCase: AddCompleteExerciseUseCase,
+    private val getAllCompleteExerciseUseCase: GetAllCompleteExerciseUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UserUiState())
@@ -30,31 +33,33 @@ class UserViewModel @Inject constructor(
     }
 
     fun addCompletedExercise(exerciseName: String) {
-        val uid = _uiState.value.user?.uid ?: return
+        //val uid = _uiState.value.user?.uid ?: return
         viewModelScope.launch {
-            val success = userService.addCompletedExercise(uid, exerciseName)
+            val success = addCompleteExerciseUseCase.invoke(exerciseName)
+
+            Log.e("FitLife", "CompletedExercisesSuccessful $success")
 
             if (success) {
                 _uiState.update { state ->
+                    Log.e("FitLife", "CompletedExercises ${state.completedExercises}")
                     state.copy(
-                        completedExercises = state.completedExercises + exerciseName
+                        completedExercises = state.completedExercises
                     )
                 }
             } else {
-                Log.e("UserViewModel", "Error al agregar ejercicio completado")
+                Log.e("FitLife", "Error al agregar ejercicio completado")
             }
         }
     }
 
     fun loadCompletedExercises() {
-        val uid = _uiState.value.user?.uid ?: return
         viewModelScope.launch {
-            val exercises = userService.getCompletedExercises(uid)
+            val exercises = getAllCompleteExerciseUseCase.invoke()
             _uiState.update { state ->
                 state.copy(completedExercises = exercises)
             }
+
+            Log.e("FitLife", "CompletedExercises: $exercises")
         }
     }
-
 }
-

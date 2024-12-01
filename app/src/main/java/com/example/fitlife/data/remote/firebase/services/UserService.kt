@@ -30,7 +30,8 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
             "uid" to user.uid
         )
 
-        val response = firebaseClient.firestore.collection(Constants.COLLECTION_USERS).add(data).await()
+        val response =
+            firebaseClient.firestore.collection(Constants.COLLECTION_USERS).add(data).await()
 
         Log.d(Constants.TAG, "The response is: ${response != null}")
 
@@ -38,7 +39,7 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
     }
 
 
-    suspend fun addImage(selectedImageUri: Uri):String {
+    suspend fun addImage(selectedImageUri: Uri): String {
         val storage = firebaseClient.store.reference
         val reference = storage.child("${System.currentTimeMillis()}.jpg")
         val uploadTask = reference.putFile(selectedImageUri)
@@ -84,27 +85,58 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
     }
 
     suspend fun addCompletedExercise(uid: String, exerciseName: String): Boolean {
-        Log.d("Firestore", "UID: $uid, Exercise: $exerciseName")
+        Log.d("FitLife", "UID: $uid, Exercise: $exerciseName")
         return try {
-            Log.d(Constants.TAG, "Updating Firestore with exercise: $exerciseName for UID: $uid")
-            val userDoc = firebaseClient.firestore.collection(Constants.COLLECTION_USERS).document(uid)
-            userDoc.update("completedExercises", FieldValue.arrayUnion(exerciseName)).await()
-            Log.d(Constants.TAG, "Firestore update successful")
+            Log.d("FitLife", "Updating Firestore with exercise: $exerciseName for UID: $uid")
+
+            val data = hashMapOf("name" to exerciseName)
+
+            val response = firebaseClient.firestore.collection(Constants.COLLECTION_USERS)
+                .whereEqualTo("uid", uid).get().await()
+
+            for (i in response.documents) {
+                i.reference.collection(Constants.COLLECTION_DONE_EXERCISES).add(data).await()
+            }
+
+            Log.d("FitLife", "Firestore update successful")
             true
         } catch (e: Exception) {
-            Log.e(Constants.TAG, "Error adding completed exercise: ${e.message}", e)
+            Log.e("FitLife", "Error adding completed exercise: ${e.message}", e)
             false
         }
     }
 
     suspend fun getCompletedExercises(uid: String): List<String> {
         return try {
-            val userRef = firebaseClient.firestore
-                .collection(Constants.COLLECTION_USERS)
-                .document(uid)
+            Log.d("FitLife", "getCompletedExercises")
 
-            val snapshot = userRef.get().await()
-            val completedExercises = snapshot.get("completedExercises") as? List<String> ?: emptyList()
+            var completedExercises: MutableList<String> = mutableListOf()
+
+            val response = firebaseClient.firestore
+                .collection(Constants.COLLECTION_USERS)
+                .whereEqualTo("uid", uid).get().await()
+
+            Log.d("FitLife", "response $response")
+
+            for (i in response.documents) {
+                val doneExercisesSnapshot = i.reference
+                    .collection(Constants.COLLECTION_DONE_EXERCISES)
+                    .get()
+                    .await()
+
+                Log.d("FitLife", "documents $i")
+
+                for (exerciseDoc in doneExercisesSnapshot.documents) {
+                    Log.d("FitLife", "Data document ${exerciseDoc.data}")
+
+                    exerciseDoc.data?.let {
+                        completedExercises.add(
+                            exerciseDoc.getString("name") ?: ""
+                        )
+                    }
+                }
+            }
+
             completedExercises
         } catch (e: Exception) {
             Log.e(Constants.TAG, "Error getting completed exercises: ${e.message}", e)

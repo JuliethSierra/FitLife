@@ -54,8 +54,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideExerciseRepository(apiService: ExerciseApiService): ExerciseRepository {
-        return ExerciseRepositoryImpl(apiService)
+    fun provideExerciseRepository(apiService: ExerciseApiService, userService: UserService, userDao: UserDao): ExerciseRepository {
+        return ExerciseRepositoryImpl(apiService,userService, userDao)
     }
 
     @Provides

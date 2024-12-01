@@ -1,6 +1,7 @@
 package com.example.fitlife.presentation.ui.screens.training
 
 import android.annotation.SuppressLint
+import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.SyncStateContract.Constants
 import android.util.Log
@@ -33,7 +34,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import com.example.fitlife.presentation.viewmodel.ExerciseViewModel
 import com.example.fitlife.presentation.viewmodel.UserViewModel
@@ -42,6 +42,7 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import coil.decode.ImageDecoderDecoder
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -53,7 +54,8 @@ fun ExerciseDetailScreen(
     viewModelUserViewModel: UserViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit
 ) {
-    val exerciseDetail by viewModel.exerciseDetail.observeAsState()
+
+    val exerciseDetail by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -72,14 +74,16 @@ fun ExerciseDetailScreen(
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                androidx.compose.material.Text(
-                    text = exerciseDetail!!.name,
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+                exerciseDetail!!.exercise?.let { it1 ->
+                    androidx.compose.material.Text(
+                        text = it1.name,
+                        style = MaterialTheme.typography.h5,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(exerciseDetail!!.gifUrl)
+                        .data(exerciseDetail!!.exercise?.gifUrl)
                         .decoderFactory(ImageDecoderDecoder.Factory())
                         .build(),
                     contentDescription = "Exercise GIF",
@@ -88,20 +92,20 @@ fun ExerciseDetailScreen(
                         .height(200.dp)
                 )
                 Text(
-                    text = "Instructions: ${exerciseDetail!!.instructions.joinToString("\n")}",
+                    text = "Instructions: ${exerciseDetail!!.exercise?.instructions?.joinToString("\n")}",
                     style = MaterialTheme.typography.body1,
                     color = Color.Gray,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
                 Text(
-                    text = "Muscles: ${exerciseDetail!!.secondaryMuscles.joinToString("\n")}",
+                    text = "Muscles: ${exerciseDetail!!.exercise?.secondaryMuscles?.joinToString("\n")}",
                     style = MaterialTheme.typography.body1,
                     color = Color.Gray,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Button(
                     onClick = {
-                        Log.d("hola", "Button clicked")
+                        Log.d("FitLife", "Button clicked")
 
                         // Llamar a addCompletedExercise de forma asincrónica y esperar que termine
                         viewModelUserViewModel.addCompletedExercise(exerciseName)

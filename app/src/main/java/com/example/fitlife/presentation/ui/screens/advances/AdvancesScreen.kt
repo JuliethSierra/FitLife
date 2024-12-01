@@ -13,6 +13,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,5 +72,9 @@ fun AdvancesScreen(viewModel: UserViewModel = hiltViewModel()) {
                 1 -> CommunityView()  // Vista "Comunidad"
             }
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.loadCompletedExercises()
     }
 }

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.fitlife.data.local.entity.ExerciseEntity
 import com.example.fitlife.data.local.entity.UserEntity
 
 @Dao
@@ -24,4 +25,11 @@ interface   UserDao {
 
     @Query("UPDATE user_table SET completedExercises = :completedExercises WHERE uid = :userId")
     suspend fun updateCompletedExercises(userId: String, completedExercises: String)
+
+    @Query("SELECT * FROM exercise_table")
+    suspend fun getAllLocalExercises(): List<ExerciseEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertExercises(exerciseEntity: ExerciseEntity)
+
 }

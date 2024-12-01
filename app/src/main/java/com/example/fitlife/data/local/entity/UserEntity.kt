@@ -16,5 +16,5 @@ data class UserEntity(
     val profilePictureUrl: String? = null,
     val numberPhone: String,
     val password: String,
-    val completedExercises: String
+    val completedExercises: List<String>? = null
 )

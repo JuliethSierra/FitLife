@@ -14,5 +14,5 @@ data class User(
     val numberPhone: String,
     val password: String,
     var uid: String = "",
-    val completedExercises: List<String> = emptyList()
+    val completedExercises: List<String>? = emptyList()
 )

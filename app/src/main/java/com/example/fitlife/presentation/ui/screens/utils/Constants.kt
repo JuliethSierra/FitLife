@@ -13,6 +13,7 @@ class Constants {
         const val COLLECTION_PRODUCTS = "products"
         const val COLLECTION_ORDERS = "orders"
         const val COLLECTION_USERS = "users"
+        const val COLLECTION_DONE_EXERCISES = "DoneExercises"
         const val PRODUCT_MATERIAL_UI = "Material: "
         const val PRODUCT_SIZE_UI = "Talla: "
         const val PRODUCT_COLOR_UI = "Color: "
