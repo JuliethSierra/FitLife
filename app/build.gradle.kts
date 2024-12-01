@@ -90,6 +90,7 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.foundation.android)
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
     implementation ("com.google.dagger:hilt-android:2.48")
     kapt ("com.google.dagger:hilt-compiler:2.48")

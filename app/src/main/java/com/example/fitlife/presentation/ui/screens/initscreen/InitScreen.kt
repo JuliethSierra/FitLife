@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,41 +64,55 @@ fun InitScreen(navController: NavController) {
             )
         }
 
-        // Barra de progreso
-        Row(
+        // Barra de progreso con título visible
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)
+                .padding(vertical = 8.dp)
                 .background(white, RoundedCornerShape(8.dp))
-                .border(2.dp, yellowAccent, RoundedCornerShape(8.dp))
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .border(2.dp, purple, RoundedCornerShape(8.dp)) // Borde amarillo
+                .padding(12.dp) // Espaciado interno
         ) {
             Text(
                 text = "Progreso",
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
-            Text(
-                text = "61%",
-                style = MaterialTheme.typography.bodyLarge,
-                color = lightGrayBlue
-            )
-        }
 
-        // Sección "En el último mes"
+            // Barra de progreso y porcentaje
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                LinearProgressIndicator(
+                    progress = 0.61f, // Ejemplo: 61% de progreso
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(8.dp),
+                    color = purple,
+                    trackColor = lightGrayBlue
+                )
+                Text(
+                    text = "61%",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = lightGrayBlue,
+                    modifier = Modifier.padding(start = 8.dp) // Espaciado a la izquierda del porcentaje
+                )
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(white, RoundedCornerShape(12.dp))
-                .border(2.dp, yellowAccent, RoundedCornerShape(12.dp))
+                .border(2.dp, purple, RoundedCornerShape(12.dp))
                 .padding(16.dp)
         ) {
             Text(
                 text = "EN EL ÚLTIMO MES",
                 style = MaterialTheme.typography.titleLarge,
-                color = yellowAccent,
+                color = purple,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )

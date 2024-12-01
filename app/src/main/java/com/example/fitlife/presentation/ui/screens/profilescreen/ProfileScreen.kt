@@ -2,12 +2,14 @@ package com.example.fitlife.presentation.ui.screens.profilescreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
@@ -21,12 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.fitlife.data.repository.AuthRepositoryImpl
+import com.example.fitlife.presentation.ui.screens.utils.Util
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import com.example.fitlife.ui.theme.lightGrayBlue
 import com.example.fitlife.ui.theme.purple
@@ -85,7 +89,8 @@ fun ProfileScreen(
                 modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
-                    .background(lightGrayBlue),
+                    .background(Brush.radialGradient(listOf(yellowAccent, purple)))
+                    .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -113,9 +118,36 @@ fun ProfileScreen(
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            UserDataCard("${user?.weight} kg", Color.Black, "Peso", yellowAccent)
-            UserDataCard("${user?.height} cm", Color.Black, "Estatura", yellowAccent)
-            UserDataCard("20.1", Color.Black, "IMC", yellowAccent)
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                backgroundColor = Color.White,
+                elevation = 8.dp,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(100.dp)
+            ) {
+                UserDataCard("${user?.weight} kg", Color.Black, "Peso", yellowAccent)
+            }
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                backgroundColor = Color.White,
+                elevation = 8.dp,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(100.dp)
+            ) {
+                UserDataCard("${user?.height} cm", Color.Black, "Estatura", yellowAccent)
+            }
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                backgroundColor = Color.White,
+                elevation = 8.dp,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(100.dp)
+            ) {
+                UserDataCard("${Util.calculateIMC(user?.weight, user?.height)}", Color.Black, "IMC", yellowAccent)
+            }
         }
 
         // Información adicional
@@ -125,22 +157,29 @@ fun ProfileScreen(
                 .padding(16.dp)
         ) {
             AdditionalInfoItem(Icons.Default.Email, "Correo", "${user?.email}", yellowAccent)
+            Divider(color = lightGrayBlue, thickness = 1.dp)
             AdditionalInfoItem(Icons.Default.CalendarToday, "Fecha de nacimiento", "${user?.birthDate}", yellowAccent)
+            Divider(color = lightGrayBlue, thickness = 1.dp)
+            if (user != null) {
+                AdditionalInfoItem(Icons.Default.CalendarToday, "}edad", "${Util.calculateAge(user.birthDate)}", yellowAccent)
+                Divider(color = lightGrayBlue, thickness = 1.dp)
+            }
             AdditionalInfoItem(Icons.Default.Person, "Sexo", "${user?.gender}", yellowAccent)
+            Divider(color = lightGrayBlue, thickness = 1.dp)
             AdditionalInfoItem(Icons.Default.Phone, "Telefono", "${user?.numberPhone}", yellowAccent)
 
         }
 
         // Botón de cerrar sesión
-        Button(
+        FloatingActionButton(
             onClick = {
                 logInViewModel.signOut()
                 navController.navigate("introduction")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = purple),
-            shape = RoundedCornerShape(16.dp),
+            backgroundColor = purple,
+            contentColor = Color.White,
             modifier = Modifier
-                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
                 .padding(16.dp)
         ) {
             Text(
@@ -149,6 +188,7 @@ fun ProfileScreen(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
+
     }
 }
 
