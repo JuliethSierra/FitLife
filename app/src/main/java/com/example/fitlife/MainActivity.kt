@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(
                                 logInViewModel = logInViewModel,
                                 navController = navController
-                                
+
                             )
                         }
 
@@ -121,7 +121,9 @@ class MainActivity : ComponentActivity() {
 
                         composable(
                             "ExerciseDetail/{exerciseName}",
-                            arguments = listOf(navArgument("exerciseName") { type = NavType.StringType })
+                            arguments = listOf(navArgument("exerciseName") {
+                                type = NavType.StringType
+                            })
                         ) { backStackEntry ->
                             val exerciseName = backStackEntry.arguments?.getString("exerciseName")
                             if (exerciseName != null) {
