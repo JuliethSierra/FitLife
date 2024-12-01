@@ -2,6 +2,7 @@ package com.example.fitlife.presentation.ui.screens.training
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.provider.SyncStateContract.Constants
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -100,6 +101,7 @@ fun ExerciseDetailScreen(
                 )
                 Button(
                     onClick = {
+                        Log.d("hola", "Button clicked")
                         viewModelUserViewModel.addCompletedExercise(exerciseName)
                         scope.launch {
                             snackbarHostState.showSnackbar("Ejercicio finalizado con éxito")
@@ -110,6 +112,7 @@ fun ExerciseDetailScreen(
                 ) {
                     Text(text = "Finalizar Ejercicio")
                 }
+
             }
         }
     } else {
