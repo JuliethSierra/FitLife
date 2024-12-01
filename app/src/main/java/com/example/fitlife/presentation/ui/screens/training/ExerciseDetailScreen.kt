@@ -1,7 +1,10 @@
 package com.example.fitlife.presentation.ui.screens.training
 
 import android.annotation.SuppressLint
+import android.graphics.ImageDecoder
 import android.os.Build
+import android.provider.SyncStateContract.Constants
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,15 +14,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
-
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -28,40 +34,56 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import com.example.fitlife.presentation.viewmodel.ExerciseViewModel
+import com.example.fitlife.presentation.viewmodel.UserViewModel
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import coil.decode.ImageDecoderDecoder
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun ExerciseDetailScreen(
     exerciseName: String,
-    viewModel: ExerciseViewModel = hiltViewModel()
+    viewModel: ExerciseViewModel = hiltViewModel(),
+    viewModelUserViewModel: UserViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit
 ) {
-    val exerciseDetail by viewModel.exerciseDetail.observeAsState()
+
+    val exerciseDetail by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(exerciseName) {
         viewModel.fetchExerciseByName(exerciseName)
     }
 
     if (exerciseDetail != null) {
-        Scaffold {
+        Scaffold(
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.White)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
-                androidx.compose.material.Text(
-                    text = "${exerciseDetail!!.name}",
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+                exerciseDetail!!.exercise?.let { it1 ->
+                    androidx.compose.material.Text(
+                        text = it1.name,
+                        style = MaterialTheme.typography.h5,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("${exerciseDetail!!.gifUrl}")
+                        .data(exerciseDetail!!.exercise?.gifUrl)
                         .decoderFactory(ImageDecoderDecoder.Factory())
                         .build(),
                     contentDescription = "Exercise GIF",
@@ -70,24 +92,46 @@ fun ExerciseDetailScreen(
                         .height(200.dp)
                 )
                 Text(
-                    text = "Instructions: ${exerciseDetail!!.instructions.joinToString("\n")}",
+                    text = "Instructions: ${exerciseDetail!!.exercise?.instructions?.joinToString("\n")}",
                     style = MaterialTheme.typography.body1,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    modifier = Modifier.padding(vertical = 8.dp)
                 )
                 Text(
-                    text = "Muscles: ${exerciseDetail!!.secondaryMuscles.joinToString("\n")}",
+                    text = "Muscles: ${exerciseDetail!!.exercise?.secondaryMuscles?.joinToString("\n")}",
                     style = MaterialTheme.typography.body1,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
+                Button(
+                    onClick = {
+                        Log.d("FitLife", "Button clicked")
+
+                        // Llamar a addCompletedExercise de forma asincrónica y esperar que termine
+                        viewModelUserViewModel.addCompletedExercise(exerciseName)
+
+                        // Una vez la operación asincrónica ha finalizado, puedes mostrar el Snackbar
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Ejercicio finalizado con éxito")
+                            onNavigateBack()  // Navegar después de completar la operación
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Finalizar Ejercicio")
+                }
+
             }
         }
     } else {
-        Text(
-            text = "Loading...",
-            style = MaterialTheme.typography.h6,
+        Box(
             modifier = Modifier.fillMaxSize(),
-            color = Color.Gray
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.width(64.dp),
+                color = MaterialTheme.colors.primary,
+            )
+        }
     }
 }
-

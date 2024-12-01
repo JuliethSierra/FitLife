@@ -1,13 +1,15 @@
 package com.example.fitlife.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.fitlife.data.local.entity.ExerciseEntity
 import com.example.fitlife.data.local.entity.UserEntity
 
 @Dao
-interface UserDao {
+interface   UserDao {
 
     @Query("SELECT * FROM user_table")
     suspend fun getAllUsers(): List<UserEntity>
@@ -17,4 +19,17 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(userEntity: UserEntity)
+
+    @Query("SELECT * FROM user_table WHERE uid = :userId")
+    fun getUserById(userId: String): LiveData<UserEntity>
+
+    @Query("UPDATE user_table SET completedExercises = :completedExercises WHERE uid = :userId")
+    suspend fun updateCompletedExercises(userId: String, completedExercises: String)
+
+    @Query("SELECT * FROM exercise_table")
+    suspend fun getAllLocalExercises(): List<ExerciseEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertExercises(exerciseEntity: ExerciseEntity)
+
 }

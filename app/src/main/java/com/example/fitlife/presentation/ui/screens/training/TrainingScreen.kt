@@ -17,6 +17,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -33,6 +34,8 @@ fun TrainingScreen(viewModel: ExerciseViewModel,  onExerciseSelected: (String) -
     val exercises = viewModel.exercises.observeAsState(emptyList())
     Log.d("TrainingScreen", "Ejercicios en la UI: ${exercises.value.size}")
 
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
     ) {
         Column(
@@ -48,7 +51,7 @@ fun TrainingScreen(viewModel: ExerciseViewModel,  onExerciseSelected: (String) -
                     .padding(16.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            if (exercises.value.isEmpty()) {
+            if (uiState.exerciseList!!.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -64,7 +67,7 @@ fun TrainingScreen(viewModel: ExerciseViewModel,  onExerciseSelected: (String) -
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
-                    items(exercises.value) { exercise ->
+                    items(uiState.exerciseList!!) { exercise ->
                         TrainingCard(
                             title = exercise.name,
                             gifUrl = exercise.gifUrl,

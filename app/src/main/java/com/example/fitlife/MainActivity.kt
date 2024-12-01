@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(
                                 logInViewModel = logInViewModel,
                                 navController = navController
-                                
+
                             )
                         }
 
@@ -119,12 +119,21 @@ class MainActivity : ComponentActivity() {
                             InitScreen(navController = navController)
                         }
 
-                        composable("ExerciseDetail/{exerciseName}", arguments = listOf(navArgument("exerciseName") { type = NavType.StringType })) { backStackEntry ->
+                        composable(
+                            "ExerciseDetail/{exerciseName}",
+                            arguments = listOf(navArgument("exerciseName") {
+                                type = NavType.StringType
+                            })
+                        ) { backStackEntry ->
                             val exerciseName = backStackEntry.arguments?.getString("exerciseName")
                             if (exerciseName != null) {
-                                ExerciseDetailScreen(exerciseName = exerciseName)
+                                ExerciseDetailScreen(
+                                    exerciseName = exerciseName,
+                                    onNavigateBack = { navController.popBackStack() } // Navega hacia atrás
+                                )
                             }
                         }
+
                     }
                 }
             }
