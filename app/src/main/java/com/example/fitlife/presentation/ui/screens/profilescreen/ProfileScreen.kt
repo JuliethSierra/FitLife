@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
@@ -154,27 +156,30 @@ fun ProfileScreen(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-
             AdditionalInfoItem(Icons.Default.Email, "Correo", "${user?.email}", yellowAccent)
+            Divider(color = lightGrayBlue, thickness = 1.dp)
             AdditionalInfoItem(Icons.Default.CalendarToday, "Fecha de nacimiento", "${user?.birthDate}", yellowAccent)
+            Divider(color = lightGrayBlue, thickness = 1.dp)
             if (user != null) {
                 AdditionalInfoItem(Icons.Default.CalendarToday, "}edad", "${Util.calculateAge(user.birthDate)}", yellowAccent)
+                Divider(color = lightGrayBlue, thickness = 1.dp)
             }
             AdditionalInfoItem(Icons.Default.Person, "Sexo", "${user?.gender}", yellowAccent)
+            Divider(color = lightGrayBlue, thickness = 1.dp)
             AdditionalInfoItem(Icons.Default.Phone, "Telefono", "${user?.numberPhone}", yellowAccent)
 
         }
 
         // Botón de cerrar sesión
-        Button(
+        FloatingActionButton(
             onClick = {
                 logInViewModel.signOut()
                 navController.navigate("introduction")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = purple),
-            shape = RoundedCornerShape(16.dp),
+            backgroundColor = purple,
+            contentColor = Color.White,
             modifier = Modifier
-                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
                 .padding(16.dp)
         ) {
             Text(
@@ -183,6 +188,7 @@ fun ProfileScreen(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
+
     }
 }
 
