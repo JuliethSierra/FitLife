@@ -111,7 +111,8 @@ class MainActivity : ComponentActivity() {
                         composable("ProfileScreen") {
                             ProfileScreen(
                                 logInViewModel = logInViewModel,
-                                navController = navController
+                                navController = navController,
+                                viewModel = userViewModel,
                             )
                         }
 

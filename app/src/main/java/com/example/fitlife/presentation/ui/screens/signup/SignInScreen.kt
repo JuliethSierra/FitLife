@@ -90,17 +90,16 @@ fun SignInScreen(
     Surface(modifier = Modifier.fillMaxSize(), color = white) {
 
         Column(
-            verticalArrangement = Arrangement.Center, // Centrar el contenido verticalmente
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            // Imagen o ícono superior
             androidx.compose.foundation.Image(
                 painter = androidx.compose.ui.res.painterResource(id = R.drawable.splash),
                 contentDescription = "Logo",
                 modifier = Modifier
-                    .padding(bottom = 16.dp) // Espaciado debajo de la imagen
-                    .size(100.dp) // Tamaño de la imagen
+                    .padding(bottom = 16.dp)
+                    .size(100.dp)
             )
             Text(
                 text = "Crea tu cuenta",

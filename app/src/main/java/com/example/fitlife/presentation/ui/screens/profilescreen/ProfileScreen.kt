@@ -5,13 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -39,9 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.fitlife.data.repository.AuthRepositoryImpl
+import com.example.fitlife.domain.model.User
+import com.example.fitlife.domain.model.enums.GenderEnum
 import com.example.fitlife.presentation.ui.screens.utils.Util
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
-import com.example.fitlife.ui.theme.lightGrayBlue
+import com.example.fitlife.presentation.viewmodel.UserViewModel
 import com.example.fitlife.ui.theme.purple
 import com.example.fitlife.ui.theme.yellowAccent
 
@@ -49,14 +50,20 @@ import com.example.fitlife.ui.theme.yellowAccent
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    logInViewModel: LogInScreenViewModel
+    logInViewModel: LogInScreenViewModel,
+    viewModel: UserViewModel
 ) {
     val user = AuthRepositoryImpl.currentUser
     var showEditDialog by remember { mutableStateOf(false) }
+    var name by remember { mutableStateOf(user?.name ?: "") }
+    var lastName by remember { mutableStateOf(user?.lastName ?: "") }
     var email by remember { mutableStateOf(user?.email ?: "") }
+    var height  by remember { mutableStateOf(user?.weight.toString()) }
     var birthDate by remember { mutableStateOf(user?.birthDate ?: "") }
-    var gender by remember { mutableStateOf(user?.gender ?: "") }
+    var gender by remember { mutableStateOf(user?.gender ?: GenderEnum.MALE) }  // Ajusta el valor predeterminado según tu enum
+    var weight by remember { mutableStateOf(user?.weight.toString()) }
     var phone by remember { mutableStateOf(user?.numberPhone ?: "") }
+    var password by remember { mutableStateOf(user?.password ?: "") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -137,7 +144,7 @@ fun ProfileScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.Center
         ) {
             item {
                 // Tarjetas de datos del usuario (Peso, Altura, Género)
@@ -247,61 +254,133 @@ fun ProfileScreen(
                 onDismissRequest = { showEditDialog = false },
                 title = { Text(text = "Editar Información", style = MaterialTheme.typography.titleMedium) },
                 text = {
-                    Column {
-                        OutlinedTextField(
-                            value = email,
-                            onValueChange = { email = it },
-                            label = { Text("Correo") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedTextField(
-                            value = birthDate,
-                            onValueChange = { birthDate = it },
-                            label = { Text("Fecha de Nacimiento") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedTextField(
-                            value = phone,
-                            onValueChange = { phone = it },
-                            label = { Text("Teléfono") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(1),  // Una sola columna de celdas
+                        modifier = Modifier.padding(2.dp),
+                        contentPadding = PaddingValues(vertical = 2.dp)
+                    ) {
+                        item {
+                            OutlinedTextField(
+                                value = name,
+                                onValueChange = { name = it },
+                                label = { Text("Nombre") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        item {
+                            OutlinedTextField(
+                                value = lastName,
+                                onValueChange = { lastName = it },
+                                label = { Text("Apellido") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        item {
+                            OutlinedTextField(
+                                value = email,
+                                onValueChange = { email = it },
+                                label = { Text("Correo") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        item {
+                            OutlinedTextField(
+                                value = height,
+                                onValueChange = { height = it },
+                                label = { Text("Altura") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        item {
+                            OutlinedTextField(
+                                value = birthDate,
+                                onValueChange = { birthDate = it },
+                                label = { Text("Fecha de Nacimiento") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        item {
+                            OutlinedTextField(
+                                value = gender.name,
+                                onValueChange = { gender = GenderEnum.valueOf(it) },
+                                label = { Text("Género") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        item {
+                            OutlinedTextField(
+                                value = weight,
+                                onValueChange = { weight = it },
+                                label = { Text("Peso") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        item {
+                            OutlinedTextField(
+                                value = phone,
+                                onValueChange = { phone = it },
+                                label = { Text("Teléfono") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        item {
+                            OutlinedTextField(
+                                value = password,
+                                onValueChange = { password = it },
+                                label = { Text("Contraseña") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
                 },
                 confirmButton = {
                     FloatingActionButton(
                         onClick = {
                             showEditDialog = false
-
-                            // Aquí puedes actualizar los datos del usuario
-                            // Por ejemplo: logInViewModel.updateUserInfo(email, birthDate, gender, phone)
+                            viewModel.updateUser(
+                                User(
+                                    name = name,
+                                    lastName = lastName,
+                                    email = email,
+                                    height = height.toFloatOrNull() ?: 0f,
+                                    birthDate = birthDate,
+                                    gender = gender,
+                                    weight = weight.toFloatOrNull() ?: 0f,
+                                    profilePictureUrl = null,
+                                    numberPhone = phone,
+                                    password = password,
+                                    uid = user?.uid ?: "",
+                                    completedExercises = emptyList()
+                                )
+                            )
+                            logInViewModel.signOut()
+                            navController.navigate("introduction")
                         },
                         backgroundColor = purple,
                         contentColor = Color.White,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(16.dp)
+                            .padding(4.dp)
                             .width(100.dp)
                     ) {
-                        Text("Guardar", color = Color.White,
-                            style = MaterialTheme.typography.bodyLarge)
-
+                        Text("Guardar", color = Color.White, style = MaterialTheme.typography.bodyLarge)
                     }
                 },
                 dismissButton = {
-                    FloatingActionButton(onClick = { showEditDialog = false },
+                    FloatingActionButton(
+                        onClick = { showEditDialog = false },
                         backgroundColor = Color.White,
                         contentColor = Color.White,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(16.dp)
+                            .padding(4.dp)
                             .border(2.dp, purple, RoundedCornerShape(16.dp))
-                            .width(100.dp)) {
+                            .width(100.dp)
+                    ) {
                         Text("Cancelar")
                     }
-                }
+                },
+                modifier = Modifier.width(340.dp)
             )
         }
     }
@@ -314,7 +393,7 @@ fun AdditionalInfoCard(icon: ImageVector, label: String, value: String) {
             .padding(vertical = 8.dp)
             .clip(RoundedCornerShape(12.dp)) // Bordes redondeados
             .background(Color.White)
-            .padding(8.dp) // Espacio interno
+            .padding(8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -366,7 +445,7 @@ fun UserDataCard(value: String, valueColor: Color, key: String, keyColor: Color)
 
         Text(
             text = key,
-            color = keyColor, // Opcionalmente puedes modificar el color
+            color = keyColor,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.constrainAs(labelText) {
                 top.linkTo(valueText.bottom, margin = 8.dp)
