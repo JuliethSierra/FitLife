@@ -2,6 +2,7 @@ package com.example.fitlife.data.local.mappers
 
 import com.example.fitlife.data.local.entity.ExerciseEntity
 import com.example.fitlife.data.local.entity.UserEntity
+import com.example.fitlife.data.local.entity.UsersEntity
 import com.example.fitlife.domain.model.Exercise
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.model.enums.GenderEnum
@@ -64,5 +65,28 @@ fun ExerciseEntity.toExercise(): Exercise {
         target = target,
         secondaryMuscles = secondaryMuscles,
         instructions = instructions
+    )
+}
+
+/*fun UsersEntity.toUsersList(): List<User> {
+    // Retorna la lista de usuarios, si no es nula, de lo contrario, devuelve una lista vacía
+    return usersList ?: emptyList()
+}*/
+
+fun User.toUsersEntity(): UsersEntity {
+    return UsersEntity(
+        name = name,
+        lastName = lastName,
+        uid = uid,
+        completedExercises = completedExercises
+    )
+}
+
+fun UsersEntity.toUser(): User {
+    return User(
+        name = name,
+        lastName = lastName,
+        uid = uid,
+        completedExercises = completedExercises
     )
 }

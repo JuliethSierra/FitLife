@@ -144,4 +144,41 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
         }
     }
 
+    suspend fun getAllDocuments(): List<User> {
+        val documentsList = mutableListOf<User>()
+
+        try {
+            // Obtener todos los documentos de la colección
+            val snapshot = firebaseClient.firestore
+                .collection(Constants.COLLECTION_USERS)
+                .get()
+                .await()
+
+            // Iterar sobre los documentos y agregar sus datos a la lista
+            for (document in snapshot.documents) {
+                if (document.data != null) {
+                    var currentUser = document.toUser()
+                    val response =
+                        document.reference.collection(Constants.COLLECTION_DONE_EXERCISES).get()
+                            .await()
+                    if (!response.isEmpty) {
+                        var listDoneExercises = mutableListOf<String>()
+                        for (i in response.documents) {
+                            listDoneExercises.add(i.getString("name" +
+                                    "")!!)
+                        }
+                        currentUser.completedExercises = listDoneExercises
+                        documentsList.add(currentUser)
+                    }
+                }
+            }
+            Log.d("FitLife", "Data community $documentsList")
+        } catch (e: Exception) {
+            println("Error al obtener los documentos: ${e.message}")
+        }
+
+        return documentsList
+    }
+
+
 }

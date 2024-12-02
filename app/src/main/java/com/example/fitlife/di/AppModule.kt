@@ -11,6 +11,7 @@ import com.example.fitlife.data.repository.AuthRepositoryImpl
 import com.example.fitlife.data.repository.ExerciseRepositoryImpl
 import com.example.fitlife.domain.repository.AuthRepository
 import com.example.fitlife.domain.repository.ExerciseRepository
+import com.example.fitlife.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,6 +67,15 @@ object AppModule {
         userDao: UserDao
     ): AuthRepository {
         return AuthRepositoryImpl(authenticationService, userService, userDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        userService: UserService,
+        userDao: UserDao
+    ): UserRepository {
+        return com.example.fitlife.data.repository.UserRepositoryImpl(userService, userDao)
     }
 
 }

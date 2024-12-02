@@ -5,14 +5,14 @@ import com.example.fitlife.domain.model.enums.GenderEnum
 data class User(
     val name: String,
     val lastName: String,
-    val email: String,
-    val height: Float,
-    val birthDate: String,
-    val gender: GenderEnum,
-    val weight: Float,
+    val email: String = "",
+    val height: Float = 0.0f,
+    val birthDate: String = "",
+    val gender: GenderEnum = GenderEnum.MALE,
+    val weight: Float = 0.0f,
     val profilePictureUrl: String? = null,
-    val numberPhone: String,
-    val password: String,
+    val numberPhone: String = "",
+    val password: String = "",
     var uid: String = "",
-    val completedExercises: List<String>? = emptyList()
+    var completedExercises: List<String>? = emptyList()
 )
