@@ -178,6 +178,7 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
             Log.e("UserService", "Error al actualizar usuario: ${e.message}")
             false
         }
+    }
 
     suspend fun getAllDocuments(): List<User> {
         val documentsList = mutableListOf<User>()
@@ -197,8 +198,12 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
                     if (!response.isEmpty) {
                         var listDoneExercises = mutableListOf<String>()
                         for (i in response.documents) {
-                            listDoneExercises.add(i.getString("name" +
-                                    "")!!)
+                            listDoneExercises.add(
+                                i.getString(
+                                    "name" +
+                                            ""
+                                )!!
+                            )
                         }
                         currentUser.completedExercises = listDoneExercises
                         documentsList.add(currentUser)
@@ -213,6 +218,5 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
         return documentsList
 
     }
-
-
+    
 }
