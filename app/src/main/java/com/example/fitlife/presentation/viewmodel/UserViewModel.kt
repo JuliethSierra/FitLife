@@ -8,6 +8,7 @@ import com.example.fitlife.data.repository.AuthRepositoryImpl
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.model.usecases.AddCompleteExerciseUseCase
 import com.example.fitlife.domain.model.usecases.GetAllCompleteExerciseUseCase
+import com.example.fitlife.domain.usecase.GetAllUsersCommunityUseCase
 import com.example.fitlife.presentation.ui.screens.states.UserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val repository: AuthRepositoryImpl,
     private val addCompleteExerciseUseCase: AddCompleteExerciseUseCase,
-    private val getAllCompleteExerciseUseCase: GetAllCompleteExerciseUseCase
+    private val getAllCompleteExerciseUseCase: GetAllCompleteExerciseUseCase,
+    private val getAllUsersCommunityUseCase: GetAllUsersCommunityUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UserUiState())
@@ -80,6 +82,18 @@ class UserViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error al actualizar usuario: ${e.message}")
             }
+        }
+    }
+
+
+    fun loadAllUsersCommunity(){
+        viewModelScope.launch {
+            val usersCommunity = getAllUsersCommunityUseCase.invoke()
+            _uiState.update { state ->
+                state.copy(usersList = usersCommunity)
+            }
+
+            Log.d("FitLife", "Community: $usersCommunity")
         }
     }
 

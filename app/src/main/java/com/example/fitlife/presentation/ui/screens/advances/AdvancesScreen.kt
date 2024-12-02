@@ -68,13 +68,21 @@ fun AdvancesScreen(viewModel: UserViewModel = hiltViewModel()) {
 
             // Mostrar la vista correspondiente según la pestaña seleccionada
             when (selectedTabIndex) {
-                0 -> MyProgressView(viewModel = viewModel) // Pasando el ViewModel a MyProgressView
-                1 -> CommunityView()  // Vista "Comunidad"
+                0 -> {
+                    MyProgressView(viewModel = viewModel) // Pasando el ViewModel a MyProgressView
+                    // Ejecutar la carga de ejercicios completados cuando esté seleccionada la pestaña "Mis avances"
+                    LaunchedEffect(key1 = selectedTabIndex) {
+                        viewModel.loadCompletedExercises()
+                    }
+                }
+                1 -> {
+                    CommunityView()  // Vista "Comunidad"
+                    // Ejecutar la carga de usuarios de la comunidad cuando esté seleccionada la pestaña "Comunidad"
+                    LaunchedEffect(key1 = selectedTabIndex) {
+                        viewModel.loadAllUsersCommunity()
+                    }
+                }
             }
         }
-    }
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.loadCompletedExercises()
     }
 }

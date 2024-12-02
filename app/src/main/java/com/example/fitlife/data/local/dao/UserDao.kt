@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.fitlife.data.local.entity.ExerciseEntity
 import com.example.fitlife.data.local.entity.UserEntity
+import com.example.fitlife.data.local.entity.UsersEntity
 
 @Dao
 interface   UserDao {
@@ -31,5 +32,11 @@ interface   UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExercises(exerciseEntity: ExerciseEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUsers(userEntity: List<UsersEntity>)
+
+    @Query("SELECT * FROM users_table")
+    suspend fun getAllUsersCommunity(): List<UsersEntity>
 
 }
