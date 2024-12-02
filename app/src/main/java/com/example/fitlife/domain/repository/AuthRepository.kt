@@ -6,4 +6,5 @@ interface AuthRepository {
     suspend fun login(email: String, password: String): User?
     suspend fun signOut()
     suspend fun isLogged(): Boolean
+    suspend fun updateUser(user: User) : Boolean
 }
