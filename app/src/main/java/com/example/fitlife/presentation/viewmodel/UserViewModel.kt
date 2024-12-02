@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
+    private val repository: AuthRepositoryImpl,
     private val addCompleteExerciseUseCase: AddCompleteExerciseUseCase,
     private val getAllCompleteExerciseUseCase: GetAllCompleteExerciseUseCase,
     private val getAllUsersCommunityUseCase: GetAllUsersCommunityUseCase
