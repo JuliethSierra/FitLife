@@ -56,6 +56,23 @@ class AuthRepositoryImpl @Inject constructor(
             false
         }
     }
+
+    override suspend fun updateUser(user: User): Boolean {
+        return try {
+            // Actualizar en Firebase
+            val firebaseUpdated = userService.updateUser(user)
+
+            // Actualizar en Room si Firebase fue exitoso
+            if (firebaseUpdated) {
+                userDao.insertUser(user.toUserEntity()) // Convierte el modelo y lo guarda en Room
+            }
+
+            firebaseUpdated
+        } catch (e: Exception) {
+            Log.e("AuthRepositoryImpl", "Error al actualizar usuario: ${e.message}")
+            false
+        }
+    }
 }
 
 
