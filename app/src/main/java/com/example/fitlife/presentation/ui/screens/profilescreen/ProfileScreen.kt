@@ -247,7 +247,7 @@ fun ProfileScreen(
                 }
             }
         }
-
+        
         // Modal de edición
         if (showEditDialog) {
             AlertDialog(
