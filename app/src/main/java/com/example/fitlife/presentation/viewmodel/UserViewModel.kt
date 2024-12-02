@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitlife.data.remote.firebase.services.UserService
 import com.example.fitlife.data.repository.AuthRepositoryImpl
+import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.model.usecases.AddCompleteExerciseUseCase
 import com.example.fitlife.domain.model.usecases.GetAllCompleteExerciseUseCase
 import com.example.fitlife.presentation.ui.screens.states.UserUiState
@@ -62,4 +63,24 @@ class UserViewModel @Inject constructor(
             Log.e("FitLife", "CompletedExercises: $exercises")
         }
     }
+
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            try {
+                val success = repository.updateUser(user) // Llama al repositorio para manejar la actualización
+
+                if (success) {
+                    Log.d("UserViewModel", "Usuario actualizado correctamente en Firebase")
+                    _uiState.update { state ->
+                        state.copy(user = user) // Actualiza el estado con el nuevo usuario
+                    }
+                } else {
+                    Log.e("UserViewModel", "No se pudo actualizar el usuario")
+                }
+            } catch (e: Exception) {
+                Log.e("UserViewModel", "Error al actualizar usuario: ${e.message}")
+            }
+        }
+    }
+
 }
