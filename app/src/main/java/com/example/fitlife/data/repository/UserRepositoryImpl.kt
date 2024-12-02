@@ -1,14 +1,9 @@
 package com.example.fitlife.data.repository
 
-import android.util.Log
 import com.example.fitlife.data.local.dao.UserDao
-import com.example.fitlife.data.local.entity.UsersEntity
-import com.example.fitlife.data.local.mappers.toExerciseEntity
 import com.example.fitlife.data.local.mappers.toUser
-import com.example.fitlife.data.local.mappers.toUserEntity
 import com.example.fitlife.data.local.mappers.toUsersEntity
 import com.example.fitlife.data.remote.firebase.services.UserService
-import com.example.fitlife.domain.model.Exercise
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.domain.repository.UserRepository
 import javax.inject.Inject

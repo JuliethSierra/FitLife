@@ -20,7 +20,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val repository: AuthRepositoryImpl,
     private val addCompleteExerciseUseCase: AddCompleteExerciseUseCase,
     private val getAllCompleteExerciseUseCase: GetAllCompleteExerciseUseCase,
     private val getAllUsersCommunityUseCase: GetAllUsersCommunityUseCase
@@ -35,7 +34,6 @@ class UserViewModel @Inject constructor(
     }
 
     fun addCompletedExercise(exerciseName: String) {
-        //val uid = _uiState.value.user?.uid ?: return
         viewModelScope.launch {
             val success = addCompleteExerciseUseCase.invoke(exerciseName)
 
