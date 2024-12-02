@@ -144,4 +144,41 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
         }
     }
 
+    suspend fun updateUser(user: User): Boolean {
+        return try {
+            // Encuentra el documento en Firebase usando el UID
+            val querySnapshot = firebaseClient.firestore
+                .collection(Constants.COLLECTION_USERS)
+                .whereEqualTo("uid", user.uid)
+                .get()
+                .await()
+
+            if (!querySnapshot.isEmpty) {
+                val document = querySnapshot.documents[0]
+
+                // Actualiza el documento con los nuevos datos
+                document.reference.update(
+                    mapOf(
+                        "name" to user.name,
+                        "lastName" to user.lastName,
+                        "email" to user.email,
+                        "height" to user.height,
+                        "birthDate" to user.birthDate,
+                        "gender" to user.gender.name,
+                        "weight" to user.weight,
+                        "profilePictureUrl" to user.profilePictureUrl,
+                        "numberPhone" to user.numberPhone
+                    )
+                ).await()
+                true
+            } else {
+                false // Si no se encuentra el usuario
+            }
+        } catch (e: Exception) {
+            Log.e("UserService", "Error al actualizar usuario: ${e.message}")
+            false
+        }
+    }
+
+
 }
