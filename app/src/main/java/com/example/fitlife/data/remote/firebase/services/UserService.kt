@@ -184,13 +184,11 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
         val documentsList = mutableListOf<User>()
 
         try {
-            // Obtener todos los documentos de la colección
             val snapshot = firebaseClient.firestore
                 .collection(Constants.COLLECTION_USERS)
                 .get()
                 .await()
 
-            // Iterar sobre los documentos y agregar sus datos a la lista
             for (document in snapshot.documents) {
                 if (document.data != null) {
                     var currentUser = document.toUser()

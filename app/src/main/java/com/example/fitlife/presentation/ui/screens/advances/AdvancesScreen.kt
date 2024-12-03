@@ -48,8 +48,8 @@ fun AdvancesScreen(viewModel: UserViewModel = hiltViewModel()) {
             TabRow(
                 selectedTabIndex = selectedTabIndex,
                 containerColor = Color.White,
-                indicator = { /* Sin indicador visual */ },
-                divider = {} // Sin línea divisoria
+                indicator = {  },
+                divider = {}
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
@@ -66,18 +66,15 @@ fun AdvancesScreen(viewModel: UserViewModel = hiltViewModel()) {
                 }
             }
 
-            // Mostrar la vista correspondiente según la pestaña seleccionada
             when (selectedTabIndex) {
                 0 -> {
-                    MyProgressView(viewModel = viewModel) // Pasando el ViewModel a MyProgressView
-                    // Ejecutar la carga de ejercicios completados cuando esté seleccionada la pestaña "Mis avances"
+                    MyProgressView(viewModel = viewModel)
                     LaunchedEffect(key1 = selectedTabIndex) {
                         viewModel.loadCompletedExercises()
                     }
                 }
                 1 -> {
-                    CommunityView()  // Vista "Comunidad"
-                    // Ejecutar la carga de usuarios de la comunidad cuando esté seleccionada la pestaña "Comunidad"
+                    CommunityView()
                     LaunchedEffect(key1 = selectedTabIndex) {
                         viewModel.loadAllUsersCommunity()
                     }
