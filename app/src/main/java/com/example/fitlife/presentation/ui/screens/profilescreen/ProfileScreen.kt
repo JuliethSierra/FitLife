@@ -114,20 +114,7 @@ fun ProfileScreen(
                 .padding(vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .background(Brush.radialGradient(listOf(yellowAccent, purple)))
-                    .padding(4.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Foto",
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
+            CameraScreen()
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "${user?.name + " " + user?.lastName}",
