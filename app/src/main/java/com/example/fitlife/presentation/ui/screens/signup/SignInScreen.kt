@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.fitlife.R
 import com.example.fitlife.presentation.ui.components.buttons.SubmitButton
@@ -89,148 +90,153 @@ fun SignInScreen(
 
     Surface(modifier = Modifier.fillMaxSize(), color = white) {
 
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            androidx.compose.foundation.Image(
-                painter = androidx.compose.ui.res.painterResource(id = R.drawable.splash),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .size(100.dp)
-            )
-            Text(
-                text = "Crea tu cuenta",
-                style = MaterialTheme.typography.h4,
-                color = purple,
-                modifier = Modifier.padding(bottom = 24.dp) // Separación del formulario
-            )
-            LazyColumn(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .imePadding(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+        ConstraintLayout( modifier = Modifier.fillMaxSize()) {
+            val (logo, title, form) = createRefs()
+
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
             ) {
-                item {
-                    InputField(
-                        valueState = name,
-                        labelId = "Nombre",
-                        focusRequester = focusRequesterName,
-                        onNext = { focusRequesterLastName.requestFocus() }
-                    )
-                }
-                item {
-                    InputField(
-                        valueState = lastName,
-                        labelId = "Apellido",
-                        focusRequester = focusRequesterLastName,
-                        onNext = { focusRequesterEmail.requestFocus() }
-                    )
-                }
-                item {
-                    EmailInput(
-                        emailState = email,
-                        labelId = "Correo Electrónico",
-                        focusRequester = focusRequesterEmail,
-                        onNext = { focusRequesterHeight.requestFocus() }
-                    )
-                }
-                item {
-                    InputField(
-                        valueState = height,
-                        labelId = "Altura (cm)",
-                        keyboardType = KeyboardType.Number,
-                        focusRequester = focusRequesterHeight,
-                        onNext = { focusRequesterWeight.requestFocus() }
-                    )
-                }
-                item {
-                    InputField(
-                        valueState = weight,
-                        labelId = "Peso (kg)",
-                        keyboardType = KeyboardType.Number,
-                        focusRequester = focusRequesterWeight,
-                        onNext = { focusRequesterBirthDate.requestFocus() }
-                    )
-                }
-                item {
-                    InputField(
-                        valueState = birthDate,
-                        labelId = "Fecha de Nacimiento (yyyy/MM/dd)",
-                        focusRequester = focusRequesterBirthDate,
-                        onNext = { focusRequesterGender.requestFocus() }
-                    )
-                }
-                item {
-                    GenderDropdownMenu(
-                        selectedGender = gender,
-                        labelId = "Género",
-                        focusRequester = focusRequesterGender,
-                        onNext = { focusRequesterPhone.requestFocus() }
-                    )
-                }
-                item {
-                    InputField(
-                        valueState = numberPhone,
-                        labelId = "Número de Teléfono",
-                        keyboardType = KeyboardType.Phone,
-                        focusRequester = focusRequesterPhone,
-                        onNext = { focusRequesterPassword.requestFocus() }
-                    )
-                }
-                item {
-                    PasswordInput(
-                        passwordState = password,
-                        labelId = "Contraseña",
-                        focusRequester = focusRequesterPassword,
-                        onNext = { focusRequesterConfirmPassword.requestFocus() }
-                    )
-                }
-                item {
-                    PasswordInput(
-                        passwordState = confirmPassword,
-                        labelId = "Confirmar Contraseña",
-                        focusRequester = focusRequesterConfirmPassword
-                    )
-                }
-
-                item {
-                    SubmitButton(
-                        textId = stringResource(id = R.string.text_sign_up),
-                        inputValid = name.value.isNotBlank() &&
-                                lastName.value.isNotBlank() &&
-                                email.value.isNotBlank() &&
-                                height.value.isNotBlank() &&
-                                weight.value.isNotBlank() &&
-                                birthDate.value.isNotBlank() &&
-                                gender.value.name.isNotBlank() &&
-                                numberPhone.value.isNotBlank() &&
-                                password.value.isNotBlank() &&
-                                confirmPassword.value.isNotBlank() &&
-                                password.value == confirmPassword.value
-                    ) {
-                        keyboardController?.hide()
-                        val user = User(
-                            name = name.value,
-                            lastName = lastName.value,
-                            email = email.value,
-                            height = height.value.toFloatOrNull() ?: 0f,
-                            birthDate = birthDate.value,
-                            gender = gender.value,
-                            weight = weight.value.toFloatOrNull() ?: 0f,
-                            numberPhone = numberPhone.value,
-                            profilePictureUrl = null,
-                            uid = "",
-                            password = password.value
+                androidx.compose.foundation.Image(
+                    painter = androidx.compose.ui.res.painterResource(id = R.drawable.splash),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .size(100.dp)
+                )
+                Text(
+                    text = "Crea tu cuenta",
+                    style = MaterialTheme.typography.h4,
+                    color = purple,
+                    modifier = Modifier.padding(bottom = 24.dp) // Separación del formulario
+                )
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .imePadding(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    item {
+                        InputField(
+                            valueState = name,
+                            labelId = "Nombre",
+                            focusRequester = focusRequesterName,
+                            onNext = { focusRequesterLastName.requestFocus() }
                         )
+                    }
+                    item {
+                        InputField(
+                            valueState = lastName,
+                            labelId = "Apellido",
+                            focusRequester = focusRequesterLastName,
+                            onNext = { focusRequesterEmail.requestFocus() }
+                        )
+                    }
+                    item {
+                        EmailInput(
+                            emailState = email,
+                            labelId = "Correo Electrónico",
+                            focusRequester = focusRequesterEmail,
+                            onNext = { focusRequesterHeight.requestFocus() }
+                        )
+                    }
+                    item {
+                        InputField(
+                            valueState = height,
+                            labelId = "Altura (cm)",
+                            keyboardType = KeyboardType.Number,
+                            focusRequester = focusRequesterHeight,
+                            onNext = { focusRequesterWeight.requestFocus() }
+                        )
+                    }
+                    item {
+                        InputField(
+                            valueState = weight,
+                            labelId = "Peso (kg)",
+                            keyboardType = KeyboardType.Number,
+                            focusRequester = focusRequesterWeight,
+                            onNext = { focusRequesterBirthDate.requestFocus() }
+                        )
+                    }
+                    item {
+                        InputField(
+                            valueState = birthDate,
+                            labelId = "Fecha de Nacimiento (yyyy/MM/dd)",
+                            focusRequester = focusRequesterBirthDate,
+                            onNext = { focusRequesterGender.requestFocus() }
+                        )
+                    }
+                    item {
+                        GenderDropdownMenu(
+                            selectedGender = gender,
+                            labelId = "Género",
+                            focusRequester = focusRequesterGender,
+                            onNext = { focusRequesterPhone.requestFocus() }
+                        )
+                    }
+                    item {
+                        InputField(
+                            valueState = numberPhone,
+                            labelId = "Número de Teléfono",
+                            keyboardType = KeyboardType.Phone,
+                            focusRequester = focusRequesterPhone,
+                            onNext = { focusRequesterPassword.requestFocus() }
+                        )
+                    }
+                    item {
+                        PasswordInput(
+                            passwordState = password,
+                            labelId = "Contraseña",
+                            focusRequester = focusRequesterPassword,
+                            onNext = { focusRequesterConfirmPassword.requestFocus() }
+                        )
+                    }
+                    item {
+                        PasswordInput(
+                            passwordState = confirmPassword,
+                            labelId = "Confirmar Contraseña",
+                            focusRequester = focusRequesterConfirmPassword
+                        )
+                    }
 
-                        signUpViewModel.signUp(user)
-                        processSignUp = true
+                    item {
+                        SubmitButton(
+                            textId = stringResource(id = R.string.text_sign_up),
+                            inputValid = name.value.isNotBlank() &&
+                                    lastName.value.isNotBlank() &&
+                                    email.value.isNotBlank() &&
+                                    height.value.isNotBlank() &&
+                                    weight.value.isNotBlank() &&
+                                    birthDate.value.isNotBlank() &&
+                                    gender.value.name.isNotBlank() &&
+                                    numberPhone.value.isNotBlank() &&
+                                    password.value.isNotBlank() &&
+                                    confirmPassword.value.isNotBlank() &&
+                                    password.value == confirmPassword.value
+                        ) {
+                            keyboardController?.hide()
+                            val user = User(
+                                name = name.value,
+                                lastName = lastName.value,
+                                email = email.value,
+                                height = height.value.toFloatOrNull() ?: 0f,
+                                birthDate = birthDate.value,
+                                gender = gender.value,
+                                weight = weight.value.toFloatOrNull() ?: 0f,
+                                numberPhone = numberPhone.value,
+                                profilePictureUrl = null,
+                                uid = "",
+                                password = password.value
+                            )
+
+                            signUpViewModel.signUp(user)
+                            processSignUp = true
+                        }
                     }
                 }
             }
+
         }
     }
 
