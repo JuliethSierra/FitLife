@@ -30,6 +30,9 @@ interface   UserDao {
     @Query("SELECT * FROM exercise_table")
     suspend fun getAllLocalExercises(): List<ExerciseEntity>
 
+    @Query("SELECT * FROM exercise_table WHERE name = :name")
+    suspend fun getLocalExerciseByName(name: String): List<ExerciseEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExercises(exerciseEntity: ExerciseEntity)
 

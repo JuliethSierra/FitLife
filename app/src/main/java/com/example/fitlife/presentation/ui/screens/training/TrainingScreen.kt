@@ -1,6 +1,5 @@
 package com.example.fitlife.presentation.ui.screens.training
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,20 +18,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.fitlife.domain.model.Exercise
-import com.example.fitlife.presentation.ui.screens.menu.BottomNavigationBar
 import com.example.fitlife.presentation.viewmodel.ExerciseViewModel
 
 @Composable
 fun TrainingScreen(viewModel: ExerciseViewModel,  onExerciseSelected: (String) -> Unit) {
-    val exercises = viewModel.exercises.observeAsState(emptyList())
-    Log.d("TrainingScreen", "Ejercicios en la UI: ${exercises.value.size}")
 
     val uiState by viewModel.uiState.collectAsState()
 

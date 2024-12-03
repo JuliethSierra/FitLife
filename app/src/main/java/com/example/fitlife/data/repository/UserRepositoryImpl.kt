@@ -15,9 +15,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun insertUsers() {
         try {
+            val currentUser = AuthRepositoryImpl.currentUser
             val users = userService.getAllDocuments()
 
-            val usersEntityList = users.map { it.toUsersEntity() }
+            // Filtra usuarios cuyo UID sea diferente al del usuario actual
+            val filteredUsers = users.filter { it.uid != currentUser?.uid }
+
+            val usersEntityList = filteredUsers.map { it.toUsersEntity() }
 
             userDao.insertUsers(usersEntityList)
         } catch (e: Exception) {

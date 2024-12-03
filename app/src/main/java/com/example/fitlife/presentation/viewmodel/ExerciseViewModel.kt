@@ -20,14 +20,6 @@ class ExerciseViewModel @Inject constructor(
     private val getExerciseByNameUseCase: GetExerciseByNameUseCase
 ) : ViewModel() {
 
-    private val _exercises = MutableLiveData<List<Exercise>>()
-    val exercises: LiveData<List<Exercise>> get() = _exercises
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> get() = _isLoading
-
-    private val _exerciseDetail = MutableLiveData<Exercise?>()
-    val exerciseDetail: LiveData<Exercise?> get() = _exerciseDetail
 
     private val _uiState = MutableStateFlow(ExerciseUIState())
     val uiState: StateFlow<ExerciseUIState> = _uiState.asStateFlow()
@@ -38,17 +30,18 @@ class ExerciseViewModel @Inject constructor(
 
     private fun fetchAllExercises() {
         viewModelScope.launch {
-            Log.d("AndroidRuntime", getAllExercisesUseCase.invoke().toString())
             try {
+                val response = getAllExercisesUseCase.invoke()
+                Log.d("AndroidRuntime", response.toString())
+
                 _uiState.value = _uiState.value.copy(
-                    exerciseList = getAllExercisesUseCase.invoke(),
+                    exerciseList = response,
                     isLoading = false
                 )
-                //val exercisesList = getAllExercisesUseCase()
-               // _exercises.value = exercisesList
-                //Log.d("ExerciseViewModel", "Ejercicios cargados: ${exercisesList.size}")
             } catch (e: Exception) {
-                _exercises.value = emptyList()
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false
+                )
                 Log.e("ExerciseViewModel", "Error al cargar ejercicios", e)
             }
         }
@@ -56,19 +49,21 @@ class ExerciseViewModel @Inject constructor(
 
     // Cargar un ejercicio específico por nombre
     fun fetchExerciseByName(name: String) {
-        _isLoading.value = true
         viewModelScope.launch {
             try {
+                val exercises = getExerciseByNameUseCase.invoke(name)
+                val exercise = exercises.first()
                 _uiState.value = _uiState.value.copy(
-                    exercise = getExerciseByNameUseCase(name).firstOrNull(),
+                    exercise = exercise,
                     isLoading = false
                 )
                 Log.d("ExerciseViewModel", "Detalle cargado: ${_uiState.value.exercise}")
             } catch (e: Exception) {
-                _exerciseDetail.value = null
+                _uiState.value = _uiState.value.copy(
+                    exercise = null,
+                    isLoading = false
+                )
                 Log.e("ExerciseViewModel", "Error al cargar detalle del ejercicio", e)
-            } finally {
-                _isLoading.value = false
             }
         }
     }

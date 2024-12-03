@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -43,6 +45,7 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import coil.decode.ImageDecoderDecoder
+import com.example.fitlife.ui.theme.purple
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -51,39 +54,49 @@ import kotlinx.coroutines.launch
 fun ExerciseDetailScreen(
     exerciseName: String,
     viewModel: ExerciseViewModel = hiltViewModel(),
-    viewModelUserViewModel: UserViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit
 ) {
 
-    val exerciseDetail by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(exerciseName) {
         viewModel.fetchExerciseByName(exerciseName)
+        Log.d("ExerciseViewModel", "Ejercicio cargado en fetchExerciseByName para: $exerciseName")
+
     }
 
-    if (exerciseDetail != null) {
-        Scaffold(
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-        ) {
+// Observa el estado desde el ViewModel
+    val exerciseDetail by viewModel.uiState.collectAsState()
+    Log.d("ExerciseDetailScreen", "Estado actual del ejercicio: $exerciseDetail")
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) {
+        Log.d("ExerciseViewModel", "uistatescreen exercise: ${exerciseDetail.exercise}")
+        Log.d("ExerciseViewModel", "uistatescreen exerciseList: ${exerciseDetail.exerciseList}")
+        Log.d("ExerciseViewModel", "uistatescreen loading: ${exerciseDetail.isLoading}")
+        if (exerciseDetail.exercise != null) {
+
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .background(color = Color.White)
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                exerciseDetail!!.exercise?.let { it1 ->
-                    androidx.compose.material.Text(
-                        text = it1.name,
-                        style = MaterialTheme.typography.h5,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                }
+                Text(
+                    text = exerciseDetail!!.exercise!!.name,
+                    style = MaterialTheme.typography.h5.copy(color = purple), // Color morado
+                    modifier = Modifier
+                        .fillMaxWidth() // Asegura que el texto ocupe el ancho completo
+                        .align(Alignment.CenterHorizontally)// Centra el texto horizontalmente
+                )
+                // Imagen GIF del ejercicio
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(exerciseDetail!!.exercise?.gifUrl)
+                        .data(exerciseDetail!!.exercise!!.gifUrl)
                         .decoderFactory(ImageDecoderDecoder.Factory())
                         .build(),
                     contentDescription = "Exercise GIF",
@@ -91,47 +104,53 @@ fun ExerciseDetailScreen(
                         .fillMaxWidth()
                         .height(200.dp)
                 )
-                Text(
-                    text = "Instructions: ${exerciseDetail!!.exercise?.instructions?.joinToString("\n")}",
-                    style = MaterialTheme.typography.body1,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-                Text(
-                    text = "Muscles: ${exerciseDetail!!.exercise?.secondaryMuscles?.joinToString("\n")}",
-                    style = MaterialTheme.typography.body1,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+
+                // Instrucciones
+                exerciseDetail!!.exercise!!.instructions?.let { instructions ->
+                    Text(
+                        text = "Instructions:\n${instructions.joinToString("\n")}",
+                        style = MaterialTheme.typography.body1,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+
+                // Músculos secundarios
+                exerciseDetail!!.exercise!!.secondaryMuscles?.let { muscles ->
+                    Text(
+                        text = "Muscles:\n${muscles.joinToString("\n")}",
+                        style = MaterialTheme.typography.body1,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                }
+
+                // Botón de finalizar ejercicio
                 Button(
                     onClick = {
-                        Log.d("FitLife", "Button clicked")
-
-                        // Llamar a addCompletedExercise de forma asincrónica y esperar que termine
-                        viewModelUserViewModel.addCompletedExercise(exerciseName)
-
-                        // Una vez la operación asincrónica ha finalizado, puedes mostrar el Snackbar
                         scope.launch {
+                            userViewModel.addCompletedExercise(exerciseName)
                             snackbarHostState.showSnackbar("Ejercicio finalizado con éxito")
-                            onNavigateBack()  // Navegar después de completar la operación
+                            onNavigateBack() // Navegar hacia atrás
                         }
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
                     Text(text = "Finalizar Ejercicio")
                 }
-
             }
-        }
-    } else {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier.width(64.dp),
-                color = MaterialTheme.colors.primary,
-            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(64.dp),
+                    color = MaterialTheme.colors.primary
+                )
+            }
         }
     }
 }
