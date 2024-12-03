@@ -27,10 +27,8 @@ class LogInScreenViewModel @Inject constructor(
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
-            Log.d(Constants.TAG, "Start to login into VM")
-            _uiState.value = _uiState.value.copy(
-                userUiState = loginUseCase.invoke(email, password),
-            )
+            val user = loginUseCase.invoke(email, password)
+            _uiState.value = _uiState.value.copy(userUiState = user)
         }
     }
 

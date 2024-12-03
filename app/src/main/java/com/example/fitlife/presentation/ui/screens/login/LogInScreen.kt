@@ -6,8 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +29,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.fitlife.R
@@ -105,6 +107,7 @@ fun LoginScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .testTag("Correo Electrónico")
                     .constrainAs(emailField) {
                         top.linkTo(title.bottom, margin = 16.dp)
                         start.linkTo(parent.start)
@@ -128,6 +131,7 @@ fun LoginScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .testTag("Contraseña")
                     .constrainAs(passwordField) {
                         top.linkTo(emailField.bottom, margin = 16.dp)
                         start.linkTo(parent.start)
@@ -148,6 +152,7 @@ fun LoginScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .testTag("Contraseña")
                     .constrainAs(loginButton) {
                         top.linkTo(passwordField.bottom, margin = 16.dp)
                         start.linkTo(parent.start)
