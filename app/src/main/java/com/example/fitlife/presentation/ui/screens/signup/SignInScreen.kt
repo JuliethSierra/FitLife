@@ -71,16 +71,16 @@ fun SignInScreen(
     val focusRequesterConfirmPassword = remember { FocusRequester() }
 
 
-    val name = remember { mutableStateOf("Andrea") }
-    val lastName = remember { mutableStateOf("Sierra") }
-    val email = remember { mutableStateOf("a@s.com") }
-    val height = remember { mutableStateOf("164") }
-    val birthDate = remember { mutableStateOf("2002/05/22") }
+    val name = remember { mutableStateOf("") }
+    val lastName = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf("") }
+    val height = remember { mutableStateOf("") }
+    val birthDate = remember { mutableStateOf("") }
     val gender = remember { mutableStateOf(GenderEnum.FEMALE) }
-    val weight = remember { mutableStateOf("60") }
-    val numberPhone = remember { mutableStateOf("3219834716") }
-    val password = remember { mutableStateOf("12345678") }
-    val confirmPassword = remember { mutableStateOf("12345678") }
+    val weight = remember { mutableStateOf("") }
+    val numberPhone = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val confirmPassword = remember { mutableStateOf("") }
 
     val uiState by signUpViewModel.uiState.collectAsState()
     var processSignUp by remember { mutableStateOf(false) }
