@@ -1,5 +1,6 @@
 package com.example.fitlife.presentation.ui.screens.initscreen
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -87,7 +88,7 @@ fun InitScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 LinearProgressIndicator(
-                    progress = 0.61f, // Ejemplo: 61% de progreso
+                    progress = 0.11f, // Ejemplo: 61% de progreso
                     modifier = Modifier
                         .weight(1f)
                         .height(8.dp),
@@ -95,7 +96,7 @@ fun InitScreen(navController: NavController) {
                     trackColor = lightGrayBlue
                 )
                 Text(
-                    text = "61%",
+                    text = "11%",
                     style = MaterialTheme.typography.bodyLarge,
                     color = lightGrayBlue,
                     modifier = Modifier.padding(start = 8.dp) // Espaciado a la izquierda del porcentaje
@@ -110,7 +111,7 @@ fun InitScreen(navController: NavController) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "EN EL ÚLTIMO MES",
+                text = "ACTUALES",
                 style = MaterialTheme.typography.titleLarge,
                 color = purple,
                 textAlign = TextAlign.Center,
@@ -121,7 +122,7 @@ fun InitScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                StatItem(value = "6", label = "Completos", backgroundColor = lightGrayBlue, textColor = white)
+                StatItem(value = "${user?.completedExercises?.size ?: "Sin datos"}", label = "Completos", backgroundColor = lightGrayBlue, textColor = white)
                 StatItem(value = "0", label = "Hits", backgroundColor = lightGrayBlue, textColor = white)
             }
         }
