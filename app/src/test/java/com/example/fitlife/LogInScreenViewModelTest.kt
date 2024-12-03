@@ -23,6 +23,7 @@ import com.example.fitlife.domain.model.usecases.SignOutUseCase
 import com.example.fitlife.presentation.ui.screens.states.LogInUIState
 import com.example.fitlife.presentation.viewmodel.LogInScreenViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.setMain
 
@@ -30,7 +31,8 @@ import kotlinx.coroutines.test.setMain
 class LogInScreenViewModelTest {
 
     @get:Rule
-    val instantExecutorRule: TestRule = InstantTaskExecutorRule() // Permite ejecutar LiveData y StateFlow de manera sincronizada.
+    val instantExecutorRule: TestRule =
+        InstantTaskExecutorRule() // Permite ejecutar LiveData y StateFlow de manera sincronizada.
 
     private lateinit var viewModel: LogInScreenViewModel
 
@@ -43,7 +45,8 @@ class LogInScreenViewModelTest {
     @MockK
     private lateinit var signOutUseCase: SignOutUseCase
 
-    private val testDispatcher = StandardTestDispatcher() // Dispatcher para control manual en pruebas.
+    private val testDispatcher =
+        StandardTestDispatcher() // Dispatcher para control manual en pruebas.
 
     @Before
     fun setUp() {
@@ -79,14 +82,16 @@ class LogInScreenViewModelTest {
         viewModel.login("test@example.com", "password123")
 
         // Recolecta el estado del UI
-        launch {
+        val job = launch {
             viewModel.uiState.collect { state ->
-                // Verificamos que el estado de UI tenga el mockUser retornado
-                assertEquals(mockUser, state.userUiState)
+                if (state.userUiState != null) {
+                    assertEquals(mockUser, state.userUiState)
+                    cancel() // Detenemos la recolección una vez que se verifica
+                }
             }
         }
 
-        // Avanza hasta que las corrutinas se terminen de ejecutar
-        advanceUntilIdle()
+        advanceUntilIdle() // Avanza las corrutinas
+        job.join() // Asegúrate de que el job termina
     }
 }

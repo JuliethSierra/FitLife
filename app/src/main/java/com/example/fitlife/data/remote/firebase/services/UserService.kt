@@ -1,21 +1,21 @@
 package com.example.fitlife.data.remote.firebase.services
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.example.fitlife.data.remote.firebase.FirebaseClient
 import com.example.fitlife.data.remote.firebase.mappers.toUser
 import com.example.fitlife.domain.model.User
 import com.example.fitlife.presentation.ui.screens.utils.Constants
-import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.tasks.await
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserService @Inject constructor(private val firebaseClient: FirebaseClient) {
 
-    private var downloadUrl: String = ""
-
+    // Método para guardar los datos del usuario en Firestore
     suspend fun saveData(user: User): Boolean {
         val data = hashMapOf(
             "name" to user.name,
@@ -38,30 +38,44 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
         return response != null
     }
 
-
+    // Método para agregar la imagen al almacenamiento de Firebase y devolver la URL
     suspend fun addImage(selectedImageUri: Uri): String {
-        val storage = firebaseClient.store.reference
-        val reference = storage.child("${System.currentTimeMillis()}.jpg")
-        val uploadTask = reference.putFile(selectedImageUri)
-        uploadTask.continueWithTask { task ->
-            if (!task.isSuccessful) {
-                task.exception?.let {
-                    throw it
-                }
-            }
-            reference.downloadUrl
-        }.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val downloadUri = task.result
-                // Convierte la URL a una cadena
-                downloadUrl = downloadUri.toString()
-                Log.d(Constants.TAG, "Register Successful image")
-            } else {
-                Log.d(Constants.TAG, "Register NOT Successful")
-            }
-        }.await()
+        // Obtén la referencia al almacenamiento de Firebase
+        Log.d("UserService", "Adding $selectedImageUri")
 
-        return downloadUrl
+        // Genera un nombre único para el archivo usando el tiempo actual
+        val reference = firebaseClient.storage.reference.child("profile_pictures/${System.currentTimeMillis()}.jpg")
+
+        Log.d("UserService", "Reference $reference")
+
+        var file = Uri.fromFile(File(selectedImageUri.toString()))
+        //val stream = FileInputStream(File("${selectedImageUri.toString().replace("content://","")}.jpg"))
+
+        // Carga el archivo
+        val uploadTask = reference.putFile(file)
+
+        Log.d("UserService", "Upload task $uploadTask")
+
+        // Espera hasta que la carga se complete y obtén la URL de descarga
+        return try {
+            // Espera a que la carga termine con continueWithTask
+            val task = uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                // Retorna la URL de descarga después de la carga
+                reference.downloadUrl
+            }.await()
+
+            // Devuelve la URL de descarga como String
+            task.toString()  // Convertir la URL a String
+        } catch (e: Exception) {
+            // Si hay algún error, manejarlo aquí
+            Log.e("Firebase", "Error uploading image", e)
+            ""
+        }
     }
 
     suspend fun getUserByUid(uid: String): User? {
@@ -218,5 +232,5 @@ class UserService @Inject constructor(private val firebaseClient: FirebaseClient
         return documentsList
 
     }
-    
+
 }

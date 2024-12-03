@@ -10,6 +10,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-A217M" value="120" />
                   <entry key="samsung SM-A546E" value="120" />
                 </map>
               </option>
@@ -23,6 +24,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-A217M" value="120" />
                   <entry key="samsung SM-A546E" value="120" />
                 </map>
               </option>

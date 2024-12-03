@@ -106,8 +106,8 @@ dependencies {
     implementation(libs.androidx.navigation.testing)
     implementation(libs.androidx.benchmark.common)
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-    implementation ("com.google.dagger:hilt-android:2.48")
-    kapt ("com.google.dagger:hilt-compiler:2.48")
+
+    kapt ("com.google.dagger:hilt-compiler:2.51.1")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
 
 
@@ -145,15 +145,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("io.coil-kt:coil-gif:2.4.0")
-
     implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
     implementation("com.squareup.moshi:moshi:1.12.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     // MockK para pruebas unitarias e instrumentadas
-    testImplementation("io.mockk:mockk:1.13.4")
-    androidTestImplementation("io.mockk:mockk-android:1.13.4")
+    testImplementation("io.mockk:mockk:1.13.5")
+    androidTestImplementation("io.mockk:mockk-android:1.13.5")
     androidTestImplementation("androidx.navigation:navigation-testing:2.8.4")
     // Dependencia para las pruebas de ViewModel y LiveData
     testImplementation ("androidx.arch.core:core-testing:2.2.0")
@@ -161,6 +159,12 @@ dependencies {
     // Dependencia para las pruebas de coroutines (si estás usando coroutines en tu ViewModel)
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     implementation(kotlin("test"))
+
+    // Compose UI Testing
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.0")
+
+// Para inspeccionar el estado y elementos de Compose durante las pruebas
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
 }
 
 kapt {

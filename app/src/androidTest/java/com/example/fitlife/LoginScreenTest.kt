@@ -14,6 +14,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import com.example.fitlife.presentation.ui.screens.states.LogInUIState
 
 @RunWith(AndroidJUnit4::class)
 class LoginScreenTest {
@@ -27,13 +29,15 @@ class LoginScreenTest {
         val mockViewModel = mockk<LogInScreenViewModel>(relaxed = true)
 
         // Simular el estado inicial del ViewModel
-        val mockUiState = MutableStateFlow(LogInScreenViewModel.UiState())
-        every { mockViewModel.uiState } returns mockUiState
+        val mockUiState = MutableStateFlow(LogInUIState()) // Asegúrate de que sea el estado correcto.
+        every { mockViewModel.uiState } returns mockUiState as StateFlow<LogInUIState>
 
         // Configura el Composable
         composeTestRule.setContent {
-            // Usamos LocalContext.current para obtener el contexto adecuado para crear el NavController
-            val navController = TestNavHostController(LocalContext.current)
+            // Usamos LocalContext.current para obtener el contexto adecuado
+            val navController = TestNavHostController(LocalContext.current).apply {
+                // Configurar el NavController si es necesario
+            }
 
             LoginScreen(navController = navController, logInViewModel = mockViewModel)
         }
